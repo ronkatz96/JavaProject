@@ -22,7 +22,7 @@ public class RAM {
 	}
 	
 	public void addPage(Page<byte[]> addPage){
-		
+		this.pages.put(addPage.getPageId(), addPage);
 	}
 	
 	public void removePage(Page<byte[]> removePage){
@@ -38,7 +38,9 @@ public class RAM {
 	}
 	
 	public void addPages(Page<byte[]>[] addPages){
-		
+		for (int i=0;i<addPages.length;i++){
+			this.pages.put(addPages[i].getPageId(), addPages[i]);
+		}
 	}
 	
 	public void removePages(Page<byte[]>[] removePages){

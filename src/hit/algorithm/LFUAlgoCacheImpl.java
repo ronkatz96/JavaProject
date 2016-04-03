@@ -11,9 +11,9 @@ public class LFUAlgoCacheImpl<K,V> implements IAlgoCache<K,V> {
 	
 	public LFUAlgoCacheImpl(int capacity){
 		
-		cache = new HashMap<K,V>(capacity);
-		cacheCounter = new HashMap<K,Integer>();
-		this.capacity = capacity;	
+		this.capacity = capacity;
+		cache = new HashMap<K,V>(this.capacity);
+		cacheCounter = new HashMap<K,Integer>();	
 	}
 	
 	@Override
@@ -31,7 +31,7 @@ public class LFUAlgoCacheImpl<K,V> implements IAlgoCache<K,V> {
 	public V putElement(K key, V value) {
 		
 		V curValue = null;
-		if(capacity == cacheCounter.size()){
+		if(capacity == cache.size()){
 			K minKey = findMin();
 			curValue = getElement(minKey);
 			removeElement(minKey);
