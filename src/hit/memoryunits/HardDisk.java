@@ -1,11 +1,14 @@
 package hit.memoryunits;
 import java.io.*;
+import java.util.Map;
 
 public class HardDisk {
 
 	static final String DEFAULT_FILE_NAME = "hdPages.txt";
 	static final int _SIZE = 1000;
 	private static final HardDisk instance = new HardDisk();
+	private Map<java.lang.Long,Page<byte[]>> map ;
+	
 	
 	private HardDisk(){
 		

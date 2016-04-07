@@ -17,7 +17,7 @@ public class RAM {
 		this.initialCapacity = initialCapacity;
 	}
 	
-	public Page<byte[]> getPage(int pageId){
+	public Page<byte[]> getPage(Long pageId){
 		return this.pages.get(pageId);
 	}
 	
@@ -29,7 +29,7 @@ public class RAM {
 		this.pages.remove(removePage);
 	}
 	
-	public Page<byte[]>[] getPages(java.lang.Long[] pageIds){
+	public Page<byte[]>[] getPages(Long[] pageIds){
 		Page<byte[]>[] arr = new Page[pageIds.length];
 		for (int i=0;i<pageIds.length;i++){
 			arr[i] = this.pages.get(pageIds[i]);

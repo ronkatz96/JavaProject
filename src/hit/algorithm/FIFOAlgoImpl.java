@@ -1,46 +1,45 @@
 package hit.algorithm;
 
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-public class FIFOAlgoImpl<K,V> extends LinkedHashMap<K,V> implements IAlgoCache<K,V> {
+public class FIFOAlgoImpl<K,V> implements IAlgoCache<K,V>{
+	private java.util.Map <K,V> pages;
+	private ArrayList<K> putOrder;
+	private int maxIndex;
+	private int initialCapacity;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private int capacity;
-	private LinkedHashMap<K,V> map;
-	
-	public FIFOAlgoImpl(int capacity){
-		
-		this.capacity = capacity;
-		map = new LinkedHashMap<K, V>(this.capacity);
-		
+	public FIFOAlgoImpl(int initialCapacity){
+		pages=new HashMap<K,V>();
+		putOrder=new ArrayList<K>();
+		maxIndex=0;
+		this.initialCapacity=initialCapacity;
 	}
 	@Override
-	public V getElement(K key) {
-		
-		return map.get(key);
+	public V getElement (K key){
+		return pages.get(key);
 	}
-
 	@Override
-	public V putElement(K key, V value) {
-		
-		return map.put(key, value);
-	
+	public V putElement (K key, V value){
+		V curValue=null;
+		if (pages.size()==initialCapacity){
+			curValue=pages.get(putOrder.get(0));
+			removeElement (putOrder.get(0));
+		}
+		putOrder.add(maxIndex, key);
+		maxIndex++;
+		pages.put(key,value);
+		return curValue;
 	}
-
 	@Override
-	public void removeElement(K key) {
-		
-		map.remove(key);
+	public void removeElement(K key){
+		if(putOrder.remove(key)){
+			maxIndex--;
+			pages.remove(key);
+		}
 	}
-	
-	 @Override
-	public boolean removeEldestEntry(Entry<K, V> entry) {
-	    return size() > this.capacity;
-	  }
-	
-	
+	@Override
+	public String toString(){
+		return putOrder.toString();
+	}
 }
