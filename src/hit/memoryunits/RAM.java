@@ -30,6 +30,7 @@ public class RAM {
 	}
 	
 	public Page<byte[]>[] getPages(Long[] pageIds){
+		@SuppressWarnings("unchecked")
 		Page<byte[]>[] arr = new Page[pageIds.length];
 		for (int i=0;i<pageIds.length;i++){
 			arr[i] = this.pages.get(pageIds[i]);

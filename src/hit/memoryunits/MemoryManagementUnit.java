@@ -8,21 +8,21 @@ import hit.algorithm.IAlgoCache;
 
 public class MemoryManagementUnit {
 	
-	private IAlgoCache<Page, Long> algo;
+	private IAlgoCache<Long, Page<byte[]>> algo;
 	private RAM ram;
 	
-	public MemoryManagementUnit(int ramCapacity, IAlgoCache<Page, Long> algo) 
+	public MemoryManagementUnit(int ramCapacity, IAlgoCache<Long, Page<byte[]>> algo) 
 	{
 		this.ram = new RAM(ramCapacity);
 		this.algo = algo;
 	}
 	
-	public IAlgoCache<Page, Long> getAlgo()
+	public IAlgoCache<Long, Page<byte[]>> getAlgo()
 	{
 		return algo;
 	}
 	
-	public void setAlgo(IAlgoCache<Page, Long> algo)
+	public void setAlgo(IAlgoCache<Long, Page<byte[]>> algo)
 	{	
 		this.algo = algo;
 	}
@@ -39,6 +39,7 @@ public class MemoryManagementUnit {
 	
 	public Page<byte[]>[] getPages(Long[] pageIds)
 	{
+		@SuppressWarnings("unchecked")
 		Page<byte[]> [] arr = new Page[pageIds.length];
 		for (int i=0;i<pageIds.length;i++){
 			arr[i] = ram.getPage(pageIds[i]);
