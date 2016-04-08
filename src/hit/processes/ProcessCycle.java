@@ -39,7 +39,7 @@ public class ProcessCycle
 	
 	public java.lang.String toString()
 	{
-		//TODO what should the overridden toString return?
+		//TODO what should be returned here?
 		return "should be replaced with actual content";
 	}
 	
