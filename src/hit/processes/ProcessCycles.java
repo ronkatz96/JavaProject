@@ -19,7 +19,7 @@ public class ProcessCycles
 	
 	public java.lang.String toString()
 	{
-		//TODO what should be returned here?
-		return "Something";
+		
+		return processCycles.toString();
 	}
 }

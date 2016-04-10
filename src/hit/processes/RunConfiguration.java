@@ -21,6 +21,6 @@ public class RunConfiguration
 	public java.lang.String toString()
 	{
 		//TODO what should be returned here?
-		return "Something";
+		return processesCycles.toString();
 	}
 }
