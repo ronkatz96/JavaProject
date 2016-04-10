@@ -3,9 +3,9 @@ package hit.memoryunits;
 public class Page<T> {
 
 	private T content; 
-	private java.lang.Long	pageId;
+	private Long pageId;
 	
-	public Page(java.lang.Long id, T content){
+	public Page(Long id, T content){
 		
 		this.pageId = id;
 		this.content = content;
@@ -19,11 +19,11 @@ public class Page<T> {
 		this.content = content;
 	}
 	
-	public java.lang.Long getPageId(){
+	public Long getPageId(){
 		return this.pageId;
 	}
 	
-	void setPageId(java.lang.Long pageId){
+	void setPageId(Long pageId){
 		this.pageId = pageId;
 	}
 	
@@ -34,12 +34,12 @@ public class Page<T> {
 		return result;	
 	}
 	
-	public java.lang.String toString(){
+	public String toString(){
 		String s = "Page ID is: " + this.pageId + " Page content is: " + this.content;
 		return s;
 	}
 	
-	public boolean equals(java.lang.Object obj){
+	public boolean equals(Object obj){
 		if ((obj instanceof Page) && (((Page<?>) obj).content == content) && (((Page<?>) obj).pageId == pageId))
 			return true;
 		else

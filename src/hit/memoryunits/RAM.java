@@ -1,9 +1,11 @@
 package hit.memoryunits;
 
+import java.util.Map;
+
 public class RAM {
 
 	private int	initialCapacity; 
-	private java.util.Map<java.lang.Long,Page<byte[]>>	pages ;
+	private Map<java.lang.Long,Page<byte[]>>	pages ;
 	
 	public RAM(int initialCapacity){
 		this.setInitialCapacity(initialCapacity);

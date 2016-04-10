@@ -17,6 +17,5 @@ public class HardDiskOutputStream extends ObjectOutputStream{
 	public void writeAllPages(Map<Long,Page<byte[]>> hd) throws IOException{
 		
 		writeObject(hd);
-		
 	}
 }

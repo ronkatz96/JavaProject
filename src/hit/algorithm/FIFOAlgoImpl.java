@@ -2,9 +2,10 @@ package hit.algorithm;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class FIFOAlgoImpl<K,V> implements IAlgoCache<K,V>{
-	private java.util.Map <K,V> pages;
+	private Map <K,V> pages;
 	private ArrayList<K> putOrder;
 	private int maxIndex;
 	private int initialCapacity;
