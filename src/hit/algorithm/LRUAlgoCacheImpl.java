@@ -4,7 +4,7 @@ import java.util.*;
 
 public class LRUAlgoCacheImpl<K,V> implements IAlgoCache<K,V>{
 	
-	private LinkedHashMap<K,V> map;
+	private Map<K,V> map;
 	Map.Entry<K,V> eldestCur;
 	private int capacity;
 	

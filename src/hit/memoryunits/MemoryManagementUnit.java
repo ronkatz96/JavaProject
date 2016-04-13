@@ -42,7 +42,12 @@ public class MemoryManagementUnit {
 		@SuppressWarnings("unchecked")
 		Page<byte[]> [] arr = new Page[pageIds.length];
 		for (int i=0;i<pageIds.length;i++){
-			arr[i] = ram.getPage(pageIds[i]);
+			if (ram.getPage(pageIds[i]) == null){
+				
+			}
+			else{
+				arr[i] = ram.getPage(pageIds[i]);
+			}
 		}
 		return arr;
 	}
