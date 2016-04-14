@@ -40,15 +40,15 @@ public class MemoryManagementUnit {
 	public Page<byte[]>[] getPages(Long[] pageIds)
 	{
 		@SuppressWarnings("unchecked")
-		Page<byte[]> [] arr = new Page[pageIds.length];
+		Page<byte[]> [] pages = new Page[pageIds.length];
 		for (int i=0;i<pageIds.length;i++){
 			if (ram.getPage(pageIds[i]) == null){
-				
+				pages[i] = this.algo.getElement(pageIds[i]);
 			}
 			else{
-				arr[i] = ram.getPage(pageIds[i]);
+				pages[i] = ram.getPage(pageIds[i]);
 			}
 		}
-		return arr;
+		return pages;
 	}
 }
