@@ -60,13 +60,14 @@ public class MemoryManagementUnit {
 				else
 				{
 					Long pageToFlush = algo.putElement(pageIds[i],pageIds[i]);
-					Page<bytep[]> pageToMoveToHD = ram.getPage(pageToFlush);
+					Page<byte[]> pageToMoveToHD = ram.getPage(pageToFlush);
 					Page<byte[]> pageToMoveToRam = hardDrive.pageReplacement(pageToMoveToHD, pageIds[i]);
-					ram.removePage(pageToMoveToRam);
+					ram.removePage(pageToMoveToHD);
 					ram.addPage(pageToMoveToRam);
 				}
 			}
 			pagesToReturn[i] = ram.getPage(pageIds[i]);
 		}
+		return pagesToReturn;
 	}
 }

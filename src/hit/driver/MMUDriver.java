@@ -18,7 +18,7 @@ public class MMUDriver
 	public static void main(String[] args) throws java.io.FileNotFoundException, java.io.IOException
 	{
 		// TODO Problematic!
-		hit.memoryunits.MemoryManagementUnit mmu = new MemoryManagementUnit(5, new LRUAlgoCacheImpl<Long, Page<byte[]>>(5));
+		hit.memoryunits.MemoryManagementUnit mmu = new MemoryManagementUnit(5, new LRUAlgoCacheImpl<Long, Long>(5));
 		RunConfiguration runConfig = readConfigurationFile(); //readConfigurationFile() is a MMUDriver static method.
 		List<ProcessCycles> processCycles = runConfig.getProcessesCycles();
 		List<hit.processes.Process> processes = createProcesses(processCycles,mmu);
