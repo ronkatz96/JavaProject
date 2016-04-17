@@ -1,4 +1,8 @@
 package hit.memoryunits;
+import hit.memoryunits.*;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 //import java.lang.reflect.Array;
 //import java.util.Collection;
@@ -8,21 +12,21 @@ import hit.algorithm.IAlgoCache;
 
 public class MemoryManagementUnit {
 	
-	private IAlgoCache<Long, Page<byte[]>> algo;
+	private IAlgoCache<Long, Long> algo;
 	private RAM ram;
 	
-	public MemoryManagementUnit(int ramCapacity, IAlgoCache<Long, Page<byte[]>> algo) 
+	public MemoryManagementUnit(int ramCapacity, IAlgoCache<Long, Long> algo) 
 	{
 		this.ram = new RAM(ramCapacity);
 		this.algo = algo;
 	}
 	
-	public IAlgoCache<Long, Page<byte[]>> getAlgo()
+	public IAlgoCache<Long, Long> getAlgo()
 	{
 		return algo;
 	}
 	
-	public void setAlgo(IAlgoCache<Long, Page<byte[]>> algo)
+	public void setAlgo(IAlgoCache<Long, Long> algo)
 	{	
 		this.algo = algo;
 	}
@@ -37,18 +41,32 @@ public class MemoryManagementUnit {
 		this.ram = ram;
 	}
 	
-	public Page<byte[]>[] getPages(Long[] pageIds)
+	
+	@SuppressWarnings("unchecked")
+	public Page<byte[]>[] getPages(Long[] pageIds) throws FileNotFoundException, IOException
 	{
-		@SuppressWarnings("unchecked")
-		Page<byte[]> [] pages = new Page[pageIds.length];
-		for (int i=0;i<pageIds.length;i++){
-			if (ram.getPage(pageIds[i]) == null){
-				pages[i] = this.algo.getElement(pageIds[i]);
+		HardDisk hardDrive = HardDisk.getInstance();
+		Page<byte[]> [] pagesToReturn = new Page[pageIds.length];
+		
+		for (int i=0;i<pageIds.length;i++)
+		{
+			if (algo.getElement(pageIds[i]) == null)
+			{
+				if (!ram.isRamFull())
+				{
+					ram.addPage(hardDrive.pageFault(pageIds[i]));
+					algo.putElement(pageIds[i], pageIds[i]);
+				}
+				else
+				{
+					Long pageToFlush = algo.putElement(pageIds[i],pageIds[i]);
+					Page<bytep[]> pageToMoveToHD = ram.getPage(pageToFlush);
+					Page<byte[]> pageToMoveToRam = hardDrive.pageReplacement(pageToMoveToHD, pageIds[i]);
+					ram.removePage(pageToMoveToRam);
+					ram.addPage(pageToMoveToRam);
+				}
 			}
-			else{
-				pages[i] = ram.getPage(pageIds[i]);
-			}
+			pagesToReturn[i] = ram.getPage(pageIds[i]);
 		}
-		return pages;
 	}
 }

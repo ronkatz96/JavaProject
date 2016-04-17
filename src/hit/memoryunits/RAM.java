@@ -51,4 +51,9 @@ public class RAM {
 			this.pages.remove(removePages[i]);
 		}
 	}
+	
+	public boolean isRamFull()
+	{
+		return (initialCapacity == pages.size());
+	}
 }

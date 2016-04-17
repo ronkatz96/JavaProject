@@ -14,6 +14,7 @@ public class HardDisk {
 	
 	private HardDisk(){
 		try {
+			//TODO add logic to create map for the first time and if exists, to load it from hdpages.txt
 			ReadHd();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
