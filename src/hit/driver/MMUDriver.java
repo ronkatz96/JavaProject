@@ -8,12 +8,14 @@ import hit.processes.Process;
 public class MMUDriver 
 { //TODO methods here are stubs! need to be implemented.
 	private static int appIds;
-	private static final String CONFIG_FILE_NAME;
+	private static final String CONFIG_FILE_NAME = "Configuration.JSON";
 	final String DEFAULT_FILE_NAME;
 	
 	public MMUDriver()
 	{
 		//TODO initialize finals here.
+		DEFAULT_FILE_NAME = HardDisk.getInstance().getFileName();
+		
 	}
 	public static void main(String[] args) throws java.io.FileNotFoundException, java.io.IOException
 	{

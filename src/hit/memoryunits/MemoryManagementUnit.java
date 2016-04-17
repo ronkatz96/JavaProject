@@ -1,13 +1,7 @@
 package hit.memoryunits;
-import hit.memoryunits.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
-//import java.lang.reflect.Array;
-//import java.util.Collection;
-//import java.util.List;
-
 import hit.algorithm.IAlgoCache;
 
 public class MemoryManagementUnit {
@@ -40,7 +34,6 @@ public class MemoryManagementUnit {
 	{
 		this.ram = ram;
 	}
-	
 	
 	@SuppressWarnings("unchecked")
 	public Page<byte[]>[] getPages(Long[] pageIds) throws FileNotFoundException, IOException

@@ -1,5 +1,9 @@
 package hit.processes;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
+
 public class Process implements Runnable {
 
 	private int id;
@@ -13,8 +17,22 @@ public class Process implements Runnable {
 		this.processCycles = processCycles;
 	}
 	@Override
-	public void run() {
-		// TODO Auto-generated method stub
+	public void run() 
+	{
+		List<ProcessCycle> pages = processCycles.getProcessCycles();
+		
+		for (int i=0;i<processCycles.size();i++)
+		{
+			try {
+				mmu.getPages((Long[])pages.get(i).getPages().toArray());
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 	}
 	public int getId() {

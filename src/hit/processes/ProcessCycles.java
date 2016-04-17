@@ -22,4 +22,10 @@ public class ProcessCycles
 		
 		return processCycles.toString();
 	}
+	
+	public int size()
+	{
+		
+		return processCycles.size();
+	}
 }

@@ -49,6 +49,11 @@ public class HardDisk {
 		return instance;
 	}
 	
+	public String getFileName(){
+		
+		return DEFAULT_FILE_NAME;
+	}
+	
 	public Page<byte[]> pageFault(Long pageId) throws FileNotFoundException, IOException{
 		
 		return hdpages.get(pageId);
