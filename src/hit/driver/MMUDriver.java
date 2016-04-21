@@ -1,5 +1,16 @@
 package hit.driver;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonToken;
+
 import hit.algorithm.*;
 import hit.memoryunits.*;
 import hit.processes.*;
@@ -27,17 +38,38 @@ public class MMUDriver
 		runProcesses(processes);
 	 
 	}
-	private static List<Process> createProcesses(List<ProcessCycles> processCycles, MemoryManagementUnit mmu) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	private static void runProcesses(List<Process> applications) {
-		// TODO Auto-generated method stub
+	@SuppressWarnings("null")
+	private static List<Process> createProcesses(List<ProcessCycles> processCycles, MemoryManagementUnit mmu) 
+	{
+		List<Process> processesToReturn = null;
+		for(ProcessCycles element : processCycles)
+		{
+			processesToReturn.add(new Process(appIds, mmu, element));
+		}
+		return processesToReturn;
 		
 	}
-	private static RunConfiguration readConfigurationFile() {
-		// TODO Auto-generated method stub
-		return null;
+	private static void runProcesses(List<Process> applications) {
+		Executor executor = Executors.newCachedThreadPool();
+		
+		for (Process element: applications)
+		{
+			executor.execute(element);
+		}
+		
+	}
+	private static RunConfiguration readConfigurationFile() throws UnsupportedEncodingException, IOException 
+	{
+		RunConfiguration configToReturn = null;
+		try(Reader reader = new InputStreamReader(JsonToken.class.getResourceAsStream(CONFIG_FILE_NAME), "UTF-8")){
+            Gson gson = new GsonBuilder().create();
+             configToReturn = gson.fromJson(reader, RunConfiguration.class);
+            
+        }
+		return configToReturn;
+    
+		
+		
 	}
 	
 	

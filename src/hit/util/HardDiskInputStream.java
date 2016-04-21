@@ -16,9 +16,9 @@ public class HardDiskInputStream extends ObjectInputStream{
 	
 	public Map<Long,Page<byte[]>> readAllPages() throws ClassNotFoundException, IOException{
 	
+		@SuppressWarnings("unchecked")
 		Map<Long, Page<byte[]>>allPages = (Map<Long, Page<byte[]>>)readObject();
 		return allPages;
 	}
 }
 
-//herro, is it me you're looking for?
