@@ -1,14 +1,17 @@
 package hit.driver;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
 import hit.algorithm.*;
@@ -19,8 +22,9 @@ import hit.processes.Process;
 public class MMUDriver 
 { //TODO methods here are stubs! need to be implemented.
 	private static int appIds;
-	private static final String CONFIG_FILE_NAME = "Configuration.JSON";
+	private static final String CONFIG_FILE_NAME = "Configuration.json";
 	final String DEFAULT_FILE_NAME;
+	private static Executor executor;
 	
 	public MMUDriver()
 	{
@@ -41,7 +45,7 @@ public class MMUDriver
 	@SuppressWarnings("null")
 	private static List<Process> createProcesses(List<ProcessCycles> processCycles, MemoryManagementUnit mmu) 
 	{
-		List<Process> processesToReturn = null;
+		List<Process> processesToReturn = new ArrayList<Process>();
 		for(ProcessCycles element : processCycles)
 		{
 			processesToReturn.add(new Process(appIds, mmu, element));
@@ -50,7 +54,7 @@ public class MMUDriver
 		
 	}
 	private static void runProcesses(List<Process> applications) {
-		Executor executor = Executors.newCachedThreadPool();
+		executor = Executors.newCachedThreadPool();
 		
 		for (Process element: applications)
 		{
@@ -61,11 +65,14 @@ public class MMUDriver
 	private static RunConfiguration readConfigurationFile() throws UnsupportedEncodingException, IOException 
 	{
 		RunConfiguration configToReturn = null;
-		try(Reader reader = new InputStreamReader(JsonToken.class.getResourceAsStream(CONFIG_FILE_NAME), "UTF-8")){
-            Gson gson = new GsonBuilder().create();
-             configToReturn = gson.fromJson(reader, RunConfiguration.class);
-            
-        }
+		try
+		{
+			configToReturn = new Gson().fromJson(new JsonReader(new FileReader(CONFIG_FILE_NAME)), RunConfiguration.class);
+		}
+		finally
+		{
+			
+		}
 		return configToReturn;
     
 		

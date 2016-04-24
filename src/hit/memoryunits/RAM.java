@@ -1,5 +1,6 @@
 package hit.memoryunits;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class RAM {
@@ -9,6 +10,7 @@ public class RAM {
 	
 	public RAM(int initialCapacity){
 		this.setInitialCapacity(initialCapacity);
+		pages = new LinkedHashMap<java.lang.Long,Page<byte[]>>();
 	}
 	
 	public int getInitialCapacity() {

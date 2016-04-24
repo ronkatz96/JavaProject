@@ -2,6 +2,7 @@ package hit.processes;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Process implements Runnable {
@@ -9,6 +10,7 @@ public class Process implements Runnable {
 	private int id;
 	private hit.memoryunits.MemoryManagementUnit mmu;
 	private ProcessCycles processCycles;
+	
 	
 	public Process(int id, hit.memoryunits.MemoryManagementUnit mmu, ProcessCycles processCycles)
 	{
@@ -24,7 +26,10 @@ public class Process implements Runnable {
 		for (int i=0;i<processCycles.size();i++)
 		{
 			try {
-				mmu.getPages((Long[])pages.get(i).getPages().toArray());
+				List<Long> pagesArr = pages.get(i).getPages();
+				
+				Long[] a = new Long[pages.size()];
+				mmu.getPages(pagesArr.toArray(a));
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
