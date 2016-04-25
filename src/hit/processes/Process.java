@@ -10,6 +10,8 @@ public class Process implements Runnable {
 	private int id;
 	private hit.memoryunits.MemoryManagementUnit mmu;
 	private ProcessCycles processCycles;
+	private Object lock = new Object();
+	
 	
 	
 	public Process(int id, hit.memoryunits.MemoryManagementUnit mmu, ProcessCycles processCycles)
@@ -21,6 +23,7 @@ public class Process implements Runnable {
 	@Override
 	public void run() 
 	{
+		
 		List<ProcessCycle> pages = processCycles.getProcessCycles();
 		
 		for (int i=0;i<processCycles.size();i++)
@@ -29,15 +32,28 @@ public class Process implements Runnable {
 				List<Long> pagesArr = pages.get(i).getPages();
 				
 				Long[] a = new Long[pages.size()];
-				mmu.getPages(pagesArr.toArray(a));
+				
+				synchronized(mmu)
+				{mmu.getPages(pagesArr.toArray(a));}
+					Thread.sleep((long)pages.get(i).getSleepMs());
+					
+					
+					
+				
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		}
+		}	
+	
+		
+		System.out.println("This is thread number: " + id);
 
 	}
 	public int getId() {
@@ -46,5 +62,6 @@ public class Process implements Runnable {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
 
 }

@@ -25,6 +25,7 @@ public class MMUDriver
 	private static final String CONFIG_FILE_NAME = "Configuration.json";
 	final String DEFAULT_FILE_NAME;
 	private static Executor executor;
+	private static hit.memoryunits.MemoryManagementUnit mmu;
 	
 	public MMUDriver()
 	{
@@ -35,30 +36,34 @@ public class MMUDriver
 	public static void main(String[] args) throws java.io.FileNotFoundException, java.io.IOException
 	{
 		// TODO Problematic!
-		hit.memoryunits.MemoryManagementUnit mmu = new MemoryManagementUnit(5, new LRUAlgoCacheImpl<Long, Long>(5));
-		RunConfiguration runConfig = readConfigurationFile(); //readConfigurationFile() is a MMUDriver static method.
+		mmu = new MemoryManagementUnit(5, new LRUAlgoCacheImpl<Long, Long>(5));
+		synchronized(mmu){
+			RunConfiguration runConfig = readConfigurationFile(); //readConfigurationFile() is a MMUDriver static method.
+		
 		List<ProcessCycles> processCycles = runConfig.getProcessesCycles();
 		List<hit.processes.Process> processes = createProcesses(processCycles,mmu);
-		runProcesses(processes);
+		runProcesses(processes);}
 	 
 	}
-	@SuppressWarnings("null")
 	private static List<Process> createProcesses(List<ProcessCycles> processCycles, MemoryManagementUnit mmu) 
 	{
 		List<Process> processesToReturn = new ArrayList<Process>();
+		appIds = 0;
 		for(ProcessCycles element : processCycles)
 		{
 			processesToReturn.add(new Process(appIds, mmu, element));
+			appIds++;
 		}
 		return processesToReturn;
 		
 	}
 	private static void runProcesses(List<Process> applications) {
-		executor = Executors.newCachedThreadPool();
+		executor = Executors.newFixedThreadPool(4);
 		
 		for (Process element: applications)
 		{
 			executor.execute(element);
+			
 		}
 		
 	}

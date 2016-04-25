@@ -25,18 +25,18 @@ public class MemoryManagementUnit {
 		this.algo = algo;
 	}
 
-	public RAM getRam() 
+	public synchronized RAM getRam() 
 	{
 		return ram;
 	}
 	
-	public void setRam(RAM ram) 
+	public synchronized void setRam(RAM ram) 
 	{
 		this.ram = ram;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Page<byte[]>[] getPages(Long[] pageIds) throws FileNotFoundException, IOException
+	public synchronized Page<byte[]>[] getPages(Long[] pageIds) throws FileNotFoundException, IOException
 	{
 		HardDisk hardDrive = HardDisk.getInstance();
 		Page<byte[]> [] pagesToReturn = new Page[pageIds.length];
@@ -47,20 +47,23 @@ public class MemoryManagementUnit {
 			{
 				if (!ram.isRamFull())
 				{
-					ram.addPage(hardDrive.pageFault(pageIds[i]));
+					synchronized(ram){
+					ram.addPage(hardDrive.pageFault(pageIds[i]));}
 					algo.putElement(pageIds[i], pageIds[i]);
 				}
 				else
 				{
+					synchronized(ram){
 					Long pageToFlush = algo.putElement(pageIds[i],pageIds[i]);
 					Page<byte[]> pageToMoveToHD = ram.getPage(pageToFlush);
 					Page<byte[]> pageToMoveToRam = hardDrive.pageReplacement(pageToMoveToHD, pageIds[i]);
 					ram.removePage(pageToMoveToHD);
-					ram.addPage(pageToMoveToRam);
+					ram.addPage(pageToMoveToRam);}
 				}
 			}
-			pagesToReturn[i] = ram.getPage(pageIds[i]);
-		}
+		
+			pagesToReturn[i] = ram.getPage(pageIds[i]);}
+		
 		return pagesToReturn;
 	}
 }

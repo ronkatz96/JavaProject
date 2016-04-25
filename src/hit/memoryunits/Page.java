@@ -1,6 +1,9 @@
 package hit.memoryunits;
 
-public class Page<T> {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Page<T> implements Serializable{
 
 	private T content; 
 	private Long pageId;

@@ -1,6 +1,7 @@
 package hit.algorithm;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 public class LRUAlgoCacheImpl<K,V> implements IAlgoCache<K,V>{
 	
@@ -15,7 +16,7 @@ public class LRUAlgoCacheImpl<K,V> implements IAlgoCache<K,V>{
 	}
 	
 	@Override
-	public V getElement(K key) {
+	public synchronized V getElement(K key) {
 		
 		if(map.containsKey(key))
 			return map.get(key);
@@ -25,14 +26,14 @@ public class LRUAlgoCacheImpl<K,V> implements IAlgoCache<K,V>{
 	@Override
 	public V putElement(K key, V value) {
 		
-		V curValue = null;
-		if(capacity == map.size()){
-			Map.Entry<K,V> leastKey = this.eldestCur;
-			curValue = leastKey.getValue();
-			removeElement(leastKey.getKey());
+		V LRUEntry = null;
+		for(K index : map.keySet())
+		{
+			LRUEntry = map.get(index);
+			
 		}
 		map.put(key, value);
-		return curValue;
+		return LRUEntry;
 	}
 
 	@Override
