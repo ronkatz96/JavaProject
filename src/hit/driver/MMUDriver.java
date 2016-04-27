@@ -1,26 +1,20 @@
 package hit.driver;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
-
 import hit.algorithm.*;
 import hit.memoryunits.*;
 import hit.processes.*;
 import hit.processes.Process;
 
 public class MMUDriver 
-{ //TODO methods here are stubs! need to be implemented.
+{ 
 	private static int appIds;
 	private static final String CONFIG_FILE_NAME = "Configuration.json";
 	final String DEFAULT_FILE_NAME;
@@ -29,20 +23,20 @@ public class MMUDriver
 	
 	public MMUDriver()
 	{
-		//TODO initialize finals here.
+		
 		DEFAULT_FILE_NAME = HardDisk.getInstance().getFileName();
 		
 	}
 	public static void main(String[] args) throws java.io.FileNotFoundException, java.io.IOException
 	{
-		// TODO Problematic!
+		
 		mmu = new MemoryManagementUnit(5, new LRUAlgoCacheImpl<Long, Long>(5));
-		synchronized(mmu){
+		
 			RunConfiguration runConfig = readConfigurationFile(); //readConfigurationFile() is a MMUDriver static method.
 		
 		List<ProcessCycles> processCycles = runConfig.getProcessesCycles();
 		List<hit.processes.Process> processes = createProcesses(processCycles,mmu);
-		runProcesses(processes);}
+		runProcesses(processes);
 	 
 	}
 	private static List<Process> createProcesses(List<ProcessCycles> processCycles, MemoryManagementUnit mmu) 
@@ -58,11 +52,13 @@ public class MMUDriver
 		
 	}
 	private static void runProcesses(List<Process> applications) {
-		executor = Executors.newFixedThreadPool(4);
-		
+		executor = Executors.newCachedThreadPool();
+		int i = 0;
 		for (Process element: applications)
 		{
 			executor.execute(element);
+			System.out.println("This is thread number: "+i);
+			i++;
 			
 		}
 		
@@ -79,10 +75,8 @@ public class MMUDriver
 			
 		}
 		return configToReturn;
-    
-		
-		
 	}
+
 	
 	
 }

@@ -3,11 +3,13 @@ package hit.memoryunits;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import hit.algorithm.IAlgoCache;
+import hit.processes.Lock;
 
 public class MemoryManagementUnit {
 	
 	private IAlgoCache<Long, Long> algo;
 	private RAM ram;
+	private Lock lock = new Lock();
 	
 	public MemoryManagementUnit(int ramCapacity, IAlgoCache<Long, Long> algo) 
 	{
@@ -38,6 +40,10 @@ public class MemoryManagementUnit {
 	@SuppressWarnings("unchecked")
 	public synchronized Page<byte[]>[] getPages(Long[] pageIds) throws FileNotFoundException, IOException
 	{
+		synchronized(lock){
+			if(lock.tryLock()){
+				
+			try{
 		HardDisk hardDrive = HardDisk.getInstance();
 		Page<byte[]> [] pagesToReturn = new Page[pageIds.length];
 		
@@ -47,23 +53,32 @@ public class MemoryManagementUnit {
 			{
 				if (!ram.isRamFull())
 				{
-					synchronized(ram){
-					ram.addPage(hardDrive.pageFault(pageIds[i]));}
+					
+					ram.addPage(hardDrive.pageFault(pageIds[i]));
 					algo.putElement(pageIds[i], pageIds[i]);
 				}
 				else
 				{
-					synchronized(ram){
+					
 					Long pageToFlush = algo.putElement(pageIds[i],pageIds[i]);
 					Page<byte[]> pageToMoveToHD = ram.getPage(pageToFlush);
 					Page<byte[]> pageToMoveToRam = hardDrive.pageReplacement(pageToMoveToHD, pageIds[i]);
 					ram.removePage(pageToMoveToHD);
-					ram.addPage(pageToMoveToRam);}
+					ram.addPage(pageToMoveToRam);
 				}
 			}
 		
-			pagesToReturn[i] = ram.getPage(pageIds[i]);}
-		
+			pagesToReturn[i] = ram.getPage(pageIds[i]);
+		}
 		return pagesToReturn;
 	}
+	finally{		
+		lock.unlock();}
+			}
+		}
+		return null;
+	}
 }
+		
+	
+
