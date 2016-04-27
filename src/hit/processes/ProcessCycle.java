@@ -6,6 +6,7 @@ public class ProcessCycle
 	private java.util.List<java.lang.Long> pages;
 	private int sleepMs;
 	
+	
 	public ProcessCycle(java.util.List<java.lang.Long> pages, int sleepMs, java.util.List<byte[]> data)
 	{
 		this.setData(data);
@@ -13,31 +14,33 @@ public class ProcessCycle
 		this.setSleepMs(sleepMs);
 	}
 
-	public java.util.List<byte[]> getData() {
+	public synchronized java.util.List<byte[]> getData() 
+	{
 		return data;
 	}
 
-	public void setData(java.util.List<byte[]> data) {
+	public synchronized void setData(java.util.List<byte[]> data) {
 		this.data = data;
 	}
 
-	public java.util.List<java.lang.Long> getPages() {
+	public synchronized java.util.List<java.lang.Long> getPages() 
+	{
 		return pages;
 	}
 
-	public void setPages(java.util.List<java.lang.Long> pages) {
+	public synchronized void setPages(java.util.List<java.lang.Long> pages) {
 		this.pages = pages;
 	}
 
-	public int getSleepMs() {
+	public synchronized int getSleepMs() {
 		return sleepMs;
 	}
 
-	public void setSleepMs(int sleepMs) {
+	public synchronized void setSleepMs(int sleepMs) {
 		this.sleepMs = sleepMs;
 	}
 	
-	public java.lang.String toString()
+	public synchronized java.lang.String toString()
 	{
 		
 		return pages.toString();
