@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -18,7 +18,7 @@ public class MMUDriver
 	private static int appIds;
 	private static final String CONFIG_FILE_NAME = "Configuration.json";
 	final String DEFAULT_FILE_NAME;
-	private static Executor executor;
+	private static ExecutorService executor;
 	private static hit.memoryunits.MemoryManagementUnit mmu;
 	
 	public MMUDriver()
@@ -37,6 +37,9 @@ public class MMUDriver
 		List<ProcessCycles> processCycles = runConfig.getProcessesCycles();
 		List<hit.processes.Process> processes = createProcesses(processCycles,mmu);
 		runProcesses(processes);
+		//Currently this method, shutDown, doesn't do anything. this is a place holder.
+		mmu.shutDown();
+		
 	 
 	}
 	private static List<Process> createProcesses(List<ProcessCycles> processCycles, MemoryManagementUnit mmu) 
@@ -53,15 +56,13 @@ public class MMUDriver
 	}
 	private static void runProcesses(List<Process> applications) {
 		executor = Executors.newCachedThreadPool();
-		int i = 0;
 		for (Process element: applications)
 		{
 			executor.execute(element);
-			System.out.println("This is thread number: "+i);
-			i++;
-			
 		}
-		
+		executor.shutdown();
+		while(!executor.isTerminated());
+		System.out.println("All Threads have finished Executing!");
 	}
 	private static RunConfiguration readConfigurationFile() throws UnsupportedEncodingException, IOException 
 	{

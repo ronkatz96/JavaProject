@@ -3,13 +3,11 @@ package hit.memoryunits;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import hit.algorithm.IAlgoCache;
-import hit.processes.Lock;
 
 public class MemoryManagementUnit {
 	
 	private IAlgoCache<Long, Long> algo;
 	private RAM ram;
-	private Lock lock = new Lock();
 	
 	public MemoryManagementUnit(int ramCapacity, IAlgoCache<Long, Long> algo) 
 	{
@@ -39,11 +37,7 @@ public class MemoryManagementUnit {
 	
 	@SuppressWarnings("unchecked")
 	public synchronized Page<byte[]>[] getPages(Long[] pageIds) throws FileNotFoundException, IOException
-	{
-		synchronized(lock){
-			if(lock.tryLock()){
-				
-			try{
+	{		
 		HardDisk hardDrive = HardDisk.getInstance();
 		Page<byte[]> [] pagesToReturn = new Page[pageIds.length];
 		
@@ -72,11 +66,10 @@ public class MemoryManagementUnit {
 		}
 		return pagesToReturn;
 	}
-	finally{		
-		lock.unlock();}
-			}
-		}
-		return null;
+	
+	public void shutDown()
+	{
+		//TODO implement shut down process. This method is only invoked on the MMUDriver once the Threads have finished their processing.
 	}
 }
 		
