@@ -18,7 +18,7 @@ public class Page<T> implements Serializable{
 		return this.content;
 	}
 	
-	public void setContent(T content){
+	void setContent(T content){
 		this.content = content;
 	}
 	
@@ -26,7 +26,7 @@ public class Page<T> implements Serializable{
 		return this.pageId;
 	}
 	
-	public void setPageId(Long pageId){
+	void setPageId(Long pageId){
 		this.pageId = pageId;
 	}
 	

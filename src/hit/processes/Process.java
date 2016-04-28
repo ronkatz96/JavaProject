@@ -1,32 +1,38 @@
 package hit.processes;
 
 import java.io.FileNotFoundException;
-import hit.memoryunits.Page;
+import hit.processes.Lock;
 import java.io.IOException;
-import java.util.Arrays;
+import java.lang.Thread.State;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Process implements Runnable 
-{
+public class Process implements Runnable {
+
 	private int id;
 	private hit.memoryunits.MemoryManagementUnit mmu;
 	private ProcessCycles processCycles;
+	private Lock lock = new Lock();
+	private long sleepMs;
+	
+	
 	
 	public Process(int id, hit.memoryunits.MemoryManagementUnit mmu, ProcessCycles processCycles)
 	{
 		this.setId(id);
 		this.mmu = mmu;
 		this.processCycles = processCycles;
+		
+		
 	}
 	@Override
-	public synchronized void run() 
+	public void run() 
 	{
-		try {
-			runContent();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		runContent();
+		Thread.State state = Thread.currentThread().getState();
+		System.out.println(Thread.currentThread().getName());
+		System.out.println("state = " + state);
 	}
 	public int getId() {
 		return id;
@@ -35,30 +41,38 @@ public class Process implements Runnable
 		this.id = id;
 	}
 	
-	private void runContent() throws FileNotFoundException, IOException
+	private synchronized void runContent()
 	{
-		byte[] bytes = new byte[8];
-		Arrays.fill( bytes, (byte) 0 );
-		for(ProcessCycle currentCycle : processCycles.getProcessCycles())
+		synchronized(lock){
+		lock.lock();
+		List<ProcessCycle> pages = processCycles.getProcessCycles();
+		
+		for (int i=0;i<processCycles.size();i++)
 		{
-			Long[] longArray = new Long[currentCycle.getPages().size()];
-			try 
-			{
-				int i;
-				Page<byte[]>[] newPages = mmu.getPages(currentCycle.getPages().toArray(longArray));
-				for(i = 0; i < newPages.length;i++)
+			
+				try 
 				{
-					newPages[i].setContent(bytes);
+					List<Long> pagesArr = pages.get(i).getPages();
+					Long[] a = new Long[pages.size()];
+					mmu.getPages(pagesArr.toArray(a));
+					sleepMs = (long)pages.get(i).getSleepMs();
+					try {
+						Thread.sleep(sleepMs);
+					} catch (InterruptedException e) {
+						
+					}
+				} 
+				catch (FileNotFoundException e) 
+				{	
+					e.printStackTrace();
+				}	 
+				catch (IOException e) 
+				{
+					e.printStackTrace();
 				}
-				
-				Thread.sleep(currentCycle.getSleepMs());
-			} 
-			catch (IOException | InterruptedException e) 
-			{
-				e.printStackTrace();
-			}
+			
 		}
-	}	
-}
+		lock.unlock();}
+	}
 	
-
+}

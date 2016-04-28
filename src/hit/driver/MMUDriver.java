@@ -5,12 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import hit.algorithm.*;
@@ -25,24 +20,24 @@ public class MMUDriver
 	final String DEFAULT_FILE_NAME;
 	private static Executor executor;
 	private static hit.memoryunits.MemoryManagementUnit mmu;
-	public static final Lock lock = new ReentrantLock();
-	
 	
 	public MMUDriver()
 	{
 		
 		DEFAULT_FILE_NAME = HardDisk.getInstance().getFileName();
 		
-		
 	}
 	public static void main(String[] args) throws java.io.FileNotFoundException, java.io.IOException
 	{
 		
 		mmu = new MemoryManagementUnit(5, new LRUAlgoCacheImpl<Long, Long>(5));
-		RunConfiguration runConfig = readConfigurationFile(); //readConfigurationFile() is a MMUDriver static method.
+		
+			RunConfiguration runConfig = readConfigurationFile(); //readConfigurationFile() is a MMUDriver static method.
+		
 		List<ProcessCycles> processCycles = runConfig.getProcessesCycles();
 		List<hit.processes.Process> processes = createProcesses(processCycles,mmu);
 		runProcesses(processes);
+	 
 	}
 	private static List<Process> createProcesses(List<ProcessCycles> processCycles, MemoryManagementUnit mmu) 
 	{
@@ -58,11 +53,14 @@ public class MMUDriver
 	}
 	private static void runProcesses(List<Process> applications) {
 		executor = Executors.newCachedThreadPool();
+		int i = 0;
 		for (Process element: applications)
 		{
 			executor.execute(element);
+			System.out.println("This is thread number: "+i);
+			i++;
+			
 		}
-		
 		
 	}
 	private static RunConfiguration readConfigurationFile() throws UnsupportedEncodingException, IOException 
