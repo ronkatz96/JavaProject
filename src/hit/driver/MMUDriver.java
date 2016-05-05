@@ -6,12 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import hit.algorithm.*;
 import hit.memoryunits.*;
 import hit.processes.*;
 import hit.processes.Process;
+import hit.util.MMULogger;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 /**
@@ -42,6 +45,8 @@ public class MMUDriver
 		runProcesses(processes);
 		//Currently this method, shutDown, doesn't do anything. this is a place holder.
 		mmu.shutDown();
+		MMULogger.getInstance().write("success", Level.INFO);
+		MMULogger.getInstance().write("test2", Level.INFO);
 	}
 	
 	private static List<Process> createProcesses(List<ProcessCycles> processCycles, MemoryManagementUnit mmu) 

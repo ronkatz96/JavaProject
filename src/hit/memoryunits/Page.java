@@ -31,10 +31,10 @@ public class Page<T> implements Serializable{
 	}
 	
 	public int hashCode(){
-		int result = 0;
-		result = (int)content/11;
-		result = (int)(result + pageId/11);
-		return result;	
+//		int result = 0;
+//		result = (int)content/11;
+//		result = (int)(result + pageId/11);
+		return content.hashCode();	
 	}
 	
 	public String toString(){
