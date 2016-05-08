@@ -2,8 +2,11 @@ package hit.memoryunits;
 import java.io.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+
 import hit.util.HardDiskInputStream;
 import hit.util.HardDiskOutputStream;
+import hit.util.MMULogger;
 
 @SuppressWarnings("serial")
 public class HardDisk implements Serializable{
@@ -74,7 +77,8 @@ public class HardDisk implements Serializable{
 	
 	public synchronized Page<byte[]> pageFault(Long pageId) throws FileNotFoundException, IOException
 	{	
-		Page<byte[]> pageToReturn = hdpages.get(pageId);	
+		Page<byte[]> pageToReturn = hdpages.get(pageId);
+		MMULogger.getInstance().write(String.format("PF: %d", pageId), Level.INFO);
 		return pageToReturn;
 	}
 	
@@ -83,6 +87,8 @@ public class HardDisk implements Serializable{
 		hdpages.put(moveToHdPage.getPageId(), moveToHdPage);
 		WriteHd();
 		Page<byte[]> pageToReturn = hdpages.get(moveToRamId);
+		String commandToWrite = String.format("PR: MTH %d MTR %d",moveToHdPage.getPageId(), moveToRamId );
+		MMULogger.getInstance().write(commandToWrite, Level.INFO);
 		return pageToReturn;
 	}
 }
