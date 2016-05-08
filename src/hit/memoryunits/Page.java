@@ -37,6 +37,7 @@ public class Page<T> implements Serializable{
 		return content.hashCode();	
 	}
 	
+	@Override
 	public String toString(){
 		String s = "Page ID is: " + this.pageId + " Page content is: " + this.content;
 		return s;

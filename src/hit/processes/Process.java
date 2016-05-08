@@ -1,8 +1,12 @@
 package hit.processes;
 
 import hit.memoryunits.Page;
+import hit.util.MMULogger;
+
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
 public class Process implements Runnable 
 {
@@ -60,6 +64,7 @@ public class Process implements Runnable
 					byte[] currentData = currentBytes.get(i);
 					System.out.println(currentData.toString());
 					newPages[i].setContent(currentData);
+					MMULogger.getInstance().write("GP: " + "P" + this.id + " " + i + " " + Arrays.toString(currentData), Level.INFO);
 				}
 				
 				Thread.sleep(currentCycle.getSleepMs());

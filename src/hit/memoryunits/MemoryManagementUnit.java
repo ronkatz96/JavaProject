@@ -64,6 +64,7 @@ public class MemoryManagementUnit {
 		
 			pagesToReturn[i] = ram.getPage(pageIds[i]);
 		}
+		
 		return pagesToReturn;
 	}
 	
