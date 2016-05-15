@@ -1,16 +1,19 @@
 package hit.memoryunits;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+
+import java.util.logging.Level;
+
+import hit.util.MMULogger;
 
 public class RAM {
 
 	private int	initialCapacity; 
-	private ConcurrentHashMap<java.lang.Long,Page<byte[]>> pages ;
+	private RamLinkedHashMap<java.lang.Long,Page<byte[]>> pages ;
 	
 	public RAM(int initialCapacity){
 		this.setInitialCapacity(initialCapacity);
-		pages = new ConcurrentHashMap<java.lang.Long,Page<byte[]>>();
+		pages = new RamLinkedHashMap<java.lang.Long,Page<byte[]>>(initialCapacity);
+		MMULogger.getInstance().write(String.format("RC %s",Integer.toString(initialCapacity)), Level.INFO);
 	}
 	
 	public int getInitialCapacity() {
@@ -57,5 +60,10 @@ public class RAM {
 	public synchronized boolean isRamFull()
 	{
 		return (initialCapacity == pages.size());
+	}
+	
+	public synchronized int pagesSize()
+	{
+		return pages.size();
 	}
 }

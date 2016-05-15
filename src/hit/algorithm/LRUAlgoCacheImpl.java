@@ -3,6 +3,8 @@ package hit.algorithm;
 import java.util.*;
 import java.util.Map.Entry;
 
+import hit.memoryunits.RamLinkedHashMap;
+
 public class LRUAlgoCacheImpl<K,V> implements IAlgoCache<K,V>{
 	
 	private Map<K,V> map;
@@ -12,7 +14,7 @@ public class LRUAlgoCacheImpl<K,V> implements IAlgoCache<K,V>{
 	public LRUAlgoCacheImpl(int capacity){
 		
 		this.capacity = capacity;
-		map = new LinkedHashMap<>(this.capacity);
+		map = new RamLinkedHashMap<>(this.capacity);
 	}
 	
 	@Override
@@ -30,8 +32,10 @@ public class LRUAlgoCacheImpl<K,V> implements IAlgoCache<K,V>{
 		for(K index : map.keySet())
 		{
 			LRUEntry = map.get(index);
+			//System.out.println("put index" + index);
 			
 		}
+		map.remove(LRUEntry);
 		map.put(key, value);
 		return LRUEntry;
 	}

@@ -2,7 +2,10 @@ package hit.memoryunits;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Level;
+
 import hit.algorithm.IAlgoCache;
+import hit.util.MMULogger;
 
 public class MemoryManagementUnit {
 	
@@ -45,6 +48,7 @@ public class MemoryManagementUnit {
 		{
 			if (algo.getElement(pageIds[i]) == null)
 			{
+				System.out.println("ram size: " + ram.pagesSize());
 				if (!ram.isRamFull())
 				{
 					
@@ -57,6 +61,8 @@ public class MemoryManagementUnit {
 					Long pageToFlush = algo.putElement(pageIds[i],pageIds[i]);
 					Page<byte[]> pageToMoveToHD = ram.getPage(pageToFlush);
 					Page<byte[]> pageToMoveToRam = hardDrive.pageReplacement(pageToMoveToHD, pageIds[i]);
+					String commandToWrite = String.format("PR: MTH %d MTR %d",pageToMoveToHD.getPageId(), pageIds[i] );
+					MMULogger.getInstance().write(commandToWrite, Level.INFO);
 					ram.removePage(pageToMoveToHD);
 					ram.addPage(pageToMoveToRam);
 				}

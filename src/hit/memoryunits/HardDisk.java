@@ -82,13 +82,13 @@ public class HardDisk implements Serializable{
 		return pageToReturn;
 	}
 	
-	public synchronized Page<byte[]> pageReplacement(Page<byte[]> moveToHdPage, Long moveToRamId)throws FileNotFoundException, IOException
+	public Page<byte[]> pageReplacement(Page<byte[]> moveToHdPage, Long moveToRamId)throws FileNotFoundException, IOException
 	{	
 		hdpages.put(moveToHdPage.getPageId(), moveToHdPage);
 		WriteHd();
 		Page<byte[]> pageToReturn = hdpages.get(moveToRamId);
-		String commandToWrite = String.format("PR: MTH %d MTR %d",moveToHdPage.getPageId(), moveToRamId );
-		MMULogger.getInstance().write(commandToWrite, Level.INFO);
+		//String commandToWrite = String.format("PR: MTH %d MTR %d",moveToHdPage.getPageId(), moveToRamId );
+		//MMULogger.getInstance().write(commandToWrite, Level.INFO);
 		return pageToReturn;
 	}
 }
