@@ -19,6 +19,11 @@ public class RAM {
 	public int getInitialCapacity() {
 		return initialCapacity;
 	}
+	
+	public RamLinkedHashMap<java.lang.Long,Page<byte[]>> getPages()
+	{
+		return pages;
+	}
 
 	public void setInitialCapacity(int initialCapacity) {
 		this.initialCapacity = initialCapacity;

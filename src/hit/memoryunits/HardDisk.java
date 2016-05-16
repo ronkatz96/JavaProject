@@ -1,5 +1,6 @@
 package hit.memoryunits;
 import java.io.*;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -30,7 +31,7 @@ public class HardDisk implements Serializable{
 		}
 		if (hdpages == null)
 		{
-			hdpages = new ConcurrentHashMap<Long,Page<byte[]>>(_SIZE);
+			hdpages = new LinkedHashMap<Long,Page<byte[]>>(_SIZE);
 			for(int i=0 ; i<_SIZE;i++)
 			{
 				hdpages.put((long) i, new Page((long) i, i));
@@ -90,5 +91,11 @@ public class HardDisk implements Serializable{
 		//String commandToWrite = String.format("PR: MTH %d MTR %d",moveToHdPage.getPageId(), moveToRamId );
 		//MMULogger.getInstance().write(commandToWrite, Level.INFO);
 		return pageToReturn;
+	}
+	
+	public void writeRamToDisk(RamLinkedHashMap<java.lang.Long,Page<byte[]>> pages)
+	{
+		hdpages.putAll(pages);
+		System.out.println("wrote everything");
 	}
 }

@@ -76,7 +76,7 @@ public class MemoryManagementUnit {
 	
 	public void shutDown()
 	{
-		//TODO implement shut down process. This method is only invoked on the MMUDriver once the Threads have finished their processing.
+		HardDisk.getInstance().writeRamToDisk(ram.getPages());
 	}
 }
 		
