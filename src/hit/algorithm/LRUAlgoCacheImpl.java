@@ -1,7 +1,6 @@
 package hit.algorithm;
 
 import java.util.*;
-import java.util.Map.Entry;
 
 import hit.memoryunits.RamLinkedHashMap;
 
@@ -25,19 +24,15 @@ public class LRUAlgoCacheImpl<K,V> implements IAlgoCache<K,V>{
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public V putElement(K key, V value) {
+	public V putElement(K key, V value) 
+	{
+			map.put(key, value);
+			@SuppressWarnings("rawtypes")
+			RamLinkedHashMap currentMap = (RamLinkedHashMap) this.map;
+			return (V) currentMap.getEldestCur().getValue();
 		
-		V LRUEntry = null;
-		for(K index : map.keySet())
-		{
-			LRUEntry = map.get(index);
-			//System.out.println("put index" + index);
-			
-		}
-		map.remove(LRUEntry);
-		map.put(key, value);
-		return LRUEntry;
 	}
 
 	@Override

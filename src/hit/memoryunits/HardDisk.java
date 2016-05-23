@@ -2,7 +2,6 @@ package hit.memoryunits;
 import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 import hit.util.HardDiskInputStream;

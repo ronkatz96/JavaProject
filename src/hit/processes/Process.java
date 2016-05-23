@@ -62,7 +62,7 @@ public class Process implements Runnable
 				for(i = 0; i < newPages.length;i++)
 				{
 					byte[] currentData = currentBytes.get(i);
-					System.out.println(Arrays.toString(currentData));
+					//System.out.println(Arrays.toString(currentData));
 					newPages[i].setContent(currentData);
 					String stringToWrite = String.format("GP: P%d %d %s",this.id, newPages[i].getPageId(), Arrays.toString(currentData));
 					MMULogger.getInstance().write(stringToWrite, Level.INFO);
