@@ -39,14 +39,14 @@ public class MemoryManagementUnit {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public synchronized Page<byte[]>[] getPages(Long[] pageIds) throws FileNotFoundException, IOException
+	public synchronized Page<byte[]>[] getPages(Long[] pageIds, boolean[] writePges) throws FileNotFoundException, IOException
 	{		
 		HardDisk hardDrive = HardDisk.getInstance();
 		Page<byte[]> [] pagesToReturn = new Page[pageIds.length];
 		
 		for (int i=0;i<pageIds.length;i++)
 		{
-			if (algo.getElement(pageIds[i]) == null)
+			if ((algo.getElement(pageIds[i]) == null) && (writePges[i] == true))
 			{
 				
 				if (!ram.isRamFull())

@@ -6,6 +6,7 @@ import hit.util.MMULogger;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 
 public class Process implements Runnable 
@@ -13,6 +14,7 @@ public class Process implements Runnable
 	private int id;
 	private hit.memoryunits.MemoryManagementUnit mmu;
 	private ProcessCycles processCycles;
+	private static Random random = new Random();
 	/**
 	 * Constructor for Process. This constructor doesn't create anything new but rather keeps all of the parameters' references.
 	 * @param id - The ID of the Process.
@@ -48,6 +50,7 @@ public class Process implements Runnable
 	 * a synchronized method to handle the thread business. goes over each cycle this process holds, gets the requested pages and write into them.
 	 * Should be noted that Oria and I bounced some ideas about the implementation of this method.
 	 */
+	@SuppressWarnings("unused")
 	private synchronized void runContent()
 	{	
 		int cycleSize = 0;
@@ -57,15 +60,25 @@ public class Process implements Runnable
 			cycleSize = currentCycle.getPages().size();
 			try {
 				Long[] pageIdsArray = new Long[cycleSize];
-				Page<byte[]>[] newPages = mmu.getPages(currentCycle.getPages().toArray(pageIdsArray));
+				//this part generates for each page if it's meant to be for reading or for writing.
+				boolean[] writePages = new boolean[cycleSize];
+				for (int j = 0; j < writePages.length; j++) 
+				{
+				    writePages[j] = random.nextBoolean();
+				}
+//				System.out.println(Arrays.toString(writePages));
+				Page<byte[]>[] newPages = mmu.getPages(currentCycle.getPages().toArray(pageIdsArray), writePages);
 				List<byte[]> currentBytes = currentCycle.getData();
 				for(i = 0; i < newPages.length;i++)
 				{
-					byte[] currentData = currentBytes.get(i);
-					//System.out.println(Arrays.toString(currentData));
-					newPages[i].setContent(currentData);
-					String stringToWrite = String.format("GP: P%d %d %s",this.id, newPages[i].getPageId(), Arrays.toString(currentData));
-					MMULogger.getInstance().write(stringToWrite, Level.INFO);
+					if (writePages[i] == true)
+					{
+						byte[] currentData = currentBytes.get(i);
+						//System.out.println(Arrays.toString(currentData));
+						newPages[i].setContent(currentData);
+						String stringToWrite = String.format("GP: P%d %d %s",this.id, newPages[i].getPageId(), Arrays.toString(currentData));
+						MMULogger.getInstance().write(stringToWrite, Level.INFO);
+					}
 				}
 				
 				Thread.sleep(currentCycle.getSleepMs());
