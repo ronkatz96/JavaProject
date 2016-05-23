@@ -48,7 +48,7 @@ public class MemoryManagementUnit {
 		{
 			if (algo.getElement(pageIds[i]) == null)
 			{
-				System.out.println("ram size: " + ram.pagesSize());
+				
 				if (!ram.isRamFull())
 				{
 					
