@@ -4,6 +4,7 @@ package hit.memoryunits;
 import java.util.logging.Level;
 
 import hit.util.MMULogger;
+import hit.util.RamLinkedHashMap;
 
 public class RAM {
 

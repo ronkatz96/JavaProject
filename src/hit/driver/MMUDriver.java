@@ -58,6 +58,8 @@ public class MMUDriver
 			processesToReturn.add(new Process(appIds, mmu, element));
 			appIds++;
 		}
+		String commandToWrite = String.format("PN:%d", processesToReturn.size() );
+		MMULogger.getInstance().write(commandToWrite, Level.INFO);
 		return processesToReturn;
 		
 	}

@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import hit.util.HardDiskInputStream;
 import hit.util.HardDiskOutputStream;
 import hit.util.MMULogger;
+import hit.util.RamLinkedHashMap;
 
 @SuppressWarnings("serial")
 public class HardDisk implements Serializable{
@@ -84,6 +85,7 @@ public class HardDisk implements Serializable{
 	
 	public Page<byte[]> pageReplacement(Page<byte[]> moveToHdPage, Long moveToRamId)throws FileNotFoundException, IOException
 	{	
+		
 		hdpages.put(moveToHdPage.getPageId(), moveToHdPage);
 		WriteHd();
 		Page<byte[]> pageToReturn = hdpages.get(moveToRamId);

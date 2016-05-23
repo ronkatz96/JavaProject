@@ -2,7 +2,7 @@ package hit.algorithm;
 
 import java.util.*;
 
-import hit.memoryunits.RamLinkedHashMap;
+import hit.util.RamLinkedHashMap;
 
 public class LRUAlgoCacheImpl<K,V> implements IAlgoCache<K,V>{
 	

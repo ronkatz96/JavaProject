@@ -1,4 +1,4 @@
-package hit.memoryunits;
+package hit.util;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
