@@ -9,7 +9,7 @@ import java.util.logging.LogRecord;
 
 public class MMULogger 
 {
-	public final static String DEFAULT_FILE_NAME = "log.txt";
+	public final static String DEFAULT_FILE_NAME = "logs\\log.txt";
 	private final static MMULogger instance = new MMULogger();
 	private FileHandler handler;
 	class OnlyMessageFormatter extends java.util.logging.Formatter

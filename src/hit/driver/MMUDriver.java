@@ -26,7 +26,7 @@ import javafx.scene.control.Alert.AlertType;
 public class MMUDriver 
 { 
 	private static int appIds; // incremented during CreateProcesses method to distinguish between different processes.
-	private static final String CONFIG_FILE_NAME = "Configuration.json";
+	private static final String CONFIG_FILE_NAME = "resources\\configuration\\Configuration.json";
 	final String DEFAULT_FILE_NAME; // instantiated during constructor with the current name.
 	private static ExecutorService executor; // utilized to run the processes.
 	private static hit.memoryunits.MemoryManagementUnit mmu;

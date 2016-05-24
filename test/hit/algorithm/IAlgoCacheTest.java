@@ -13,7 +13,7 @@ public class IAlgoCacheTest {
 		 * 
 		 */
 	}
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unused" })
 	public static void test() 
 	{
 		IAlgoCache cache1 = new FIFOAlgoImpl(5);

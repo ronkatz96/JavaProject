@@ -2,11 +2,9 @@ package hit.processes;
 
 import hit.memoryunits.Page;
 import hit.util.MMULogger;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 
 public class Process implements Runnable 
@@ -14,7 +12,7 @@ public class Process implements Runnable
 	private int id;
 	private hit.memoryunits.MemoryManagementUnit mmu;
 	private ProcessCycles processCycles;
-	private static Random random = new Random();
+	
 	/**
 	 * Constructor for Process. This constructor doesn't create anything new but rather keeps all of the parameters' references.
 	 * @param id - The ID of the Process.
@@ -50,7 +48,7 @@ public class Process implements Runnable
 	 * a synchronized method to handle the thread business. goes over each cycle this process holds, gets the requested pages and write into them.
 	 * Should be noted that Oria and I bounced some ideas about the implementation of this method.
 	 */
-	@SuppressWarnings("unused")
+	
 	private synchronized void runContent()
 	{	
 		int cycleSize = 0;

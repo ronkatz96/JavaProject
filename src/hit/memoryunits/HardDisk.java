@@ -12,7 +12,7 @@ import hit.util.RamLinkedHashMap;
 @SuppressWarnings("serial")
 public class HardDisk implements Serializable{
 
-	static final String DEFAULT_FILE_NAME = "hdPages.bin";
+	static final String DEFAULT_FILE_NAME = "resources\\harddisk\\hdPages.bin";
 	static final int _SIZE = 500;
 	private static final HardDisk instance = new HardDisk();
 	private static Map<Long,Page<byte[]>> hdpages;
