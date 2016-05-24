@@ -11,7 +11,6 @@ public class MMULogFileController {
 	public void start(){
 		try{
 			ServerSocket server = new ServerSocket(1234);
-			server.setSoTimeout(5000);
 			Socket client = server.accept();
 			ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream());
 			ObjectInputStream input = new ObjectInputStream(client.getInputStream());
