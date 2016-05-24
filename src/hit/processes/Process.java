@@ -62,23 +62,18 @@ public class Process implements Runnable
 				Long[] pageIdsArray = new Long[cycleSize];
 				//this part generates for each page if it's meant to be for reading or for writing.
 				boolean[] writePages = new boolean[cycleSize];
-				for (int j = 0; j < writePages.length; j++) 
-				{
-				    writePages[j] = random.nextBoolean();
-				}
 //				System.out.println(Arrays.toString(writePages));
 				Page<byte[]>[] newPages = mmu.getPages(currentCycle.getPages().toArray(pageIdsArray), writePages);
 				List<byte[]> currentBytes = currentCycle.getData();
 				for(i = 0; i < newPages.length;i++)
 				{
+					byte[] currentData = currentBytes.get(i);
 					if (writePages[i] == true)
 					{
-						byte[] currentData = currentBytes.get(i);
-						//System.out.println(Arrays.toString(currentData));
-						newPages[i].setContent(currentData);
-						String stringToWrite = String.format("GP: P%d %d %s",this.id, newPages[i].getPageId(), Arrays.toString(currentData));
-						MMULogger.getInstance().write(stringToWrite, Level.INFO);
+						newPages[i].setContent(currentData);	
 					}
+					String stringToWrite = String.format("GP: P%d %d %s",this.id, newPages[i].getPageId(), Arrays.toString(currentData));
+					MMULogger.getInstance().write(stringToWrite, Level.INFO);
 				}
 				
 				Thread.sleep(currentCycle.getSleepMs());

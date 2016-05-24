@@ -46,14 +46,19 @@ public class MemoryManagementUnit {
 		
 		for (int i=0;i<pageIds.length;i++)
 		{
-			if ((algo.getElement(pageIds[i]) == null) && (writePges[i] == true))
+			if (algo.getElement(pageIds[i]) == null)
 			{
 				
 				if (!ram.isRamFull())
 				{
-					
-					ram.addPage(hardDrive.pageFault(pageIds[i]));
+					Page<byte[]> pageToAdd = hardDrive.pageFault(pageIds[i]);
+					if (pageToAdd.getContent() == null)
+							writePges[i] = true;
+					else
+							writePges[i] = false;
+					ram.addPage(pageToAdd);
 					algo.putElement(pageIds[i], pageIds[i]);
+					
 				}
 				else
 				{
