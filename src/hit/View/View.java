@@ -1,4 +1,4 @@
-package View;
+package hit.View;
 
 public interface View 
 {

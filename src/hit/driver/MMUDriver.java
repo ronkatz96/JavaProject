@@ -15,8 +15,7 @@ import hit.memoryunits.*;
 import hit.processes.*;
 import hit.processes.Process;
 import hit.util.MMULogger;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+
 /**
  * This Class demonstrates the use of the MMU.
  * It utilizes the configuration.JSON file to create processes which read / write data to the RAM and Hard Disk.
@@ -45,8 +44,14 @@ public class MMUDriver
 		runProcesses(processes);
 		//Currently this method, shutDown, doesn't do anything. this is a place holder.
 		mmu.shutDown();
-		MMULogger.getInstance().write("success", Level.INFO);
-		MMULogger.getInstance().write("test2", Level.INFO);
+		
+		/*
+		 * Work-In-Progress MVC Model:
+		 */
+		// Model model = new MMUModel(MMULogger.DEFAULT_FILE_NAME);
+		// View view = new MMUView();
+		// Controller controller = new MMUController(model, view);
+		// controller.start();
 	}
 	
 	private static List<Process> createProcesses(List<ProcessCycles> processCycles, MemoryManagementUnit mmu) 
