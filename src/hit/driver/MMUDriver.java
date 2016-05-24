@@ -10,6 +10,9 @@ import java.util.logging.Level;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+
+import hit.Model.MMUModel;
+import hit.Model.Model;
 import hit.algorithm.*;
 import hit.memoryunits.*;
 import hit.processes.*;
@@ -48,7 +51,8 @@ public class MMUDriver
 		/*
 		 * Work-In-Progress MVC Model:
 		 */
-		// Model model = new MMUModel(MMULogger.DEFAULT_FILE_NAME);
+		Model model = new MMUModel(MMULogger.DEFAULT_FILE_NAME);
+		model.readData();
 		// View view = new MMUView();
 		// Controller controller = new MMUController(model, view);
 		// controller.start();
