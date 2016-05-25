@@ -55,7 +55,7 @@ public class HardDisk implements Serializable{
 		}
 	}
 	
-	public synchronized void ReadHd() throws ClassNotFoundException, FileNotFoundException, IOException
+	private synchronized void ReadHd() throws ClassNotFoundException, FileNotFoundException, IOException
 	{		
 		HardDiskInputStream input;
 		input = new HardDiskInputStream(new FileInputStream(DEFAULT_FILE_NAME));
