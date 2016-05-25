@@ -12,7 +12,7 @@ public class AuthenticationInputStream extends ObjectInputStream{
 		super(in);
 	}
 	
-	public LinkedHashMap<String, String> readAllPages() throws ClassNotFoundException, IOException{
+	public LinkedHashMap<String, String> readAllUsers() throws ClassNotFoundException, IOException{
 	
 		@SuppressWarnings("unchecked")
 		LinkedHashMap<String, String>allUsers = (LinkedHashMap<String, String>)readObject();

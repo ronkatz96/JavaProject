@@ -42,7 +42,7 @@ public class Authentication {
 		input = new AuthenticationInputStream(new FileInputStream(DEFAULT_FILE_NAME));
 		if (input != null)
 		{
-			users = input.readAllPages();
+			users = input.readAllUsers();
 			input.close();
 		}
 	}
