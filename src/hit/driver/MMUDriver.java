@@ -13,7 +13,11 @@ import com.google.gson.stream.JsonReader;
 
 import hit.Model.MMUModel;
 import hit.Model.Model;
+import hit.View.MMUView;
+import hit.View.View;
 import hit.algorithm.*;
+import hit.controller.Controller;
+import hit.controller.MMUController;
 import hit.memoryunits.*;
 import hit.processes.*;
 import hit.processes.Process;
@@ -53,21 +57,21 @@ public class MMUDriver
 		 */
 		Model model = new MMUModel(MMULogger.DEFAULT_FILE_NAME);
 		model.readData();
-		// View view = new MMUView();
-		// Controller controller = new MMUController(model, view);
-		// controller.start();
+		View view = new MMUView();
+		Controller controller = new MMUController(view, model);
+		controller.start();
 	}
 	
 	private static List<Process> createProcesses(List<ProcessCycles> processCycles, MemoryManagementUnit mmu) 
 	{
 		List<Process> processesToReturn = new ArrayList<Process>();
-		appIds = 0;
+		appIds = 1;
 		for(ProcessCycles element : processCycles)
 		{
 			processesToReturn.add(new Process(appIds, mmu, element));
 			appIds++;
 		}
-		String commandToWrite = String.format("PN:%d", processesToReturn.size() );
+		String commandToWrite = String.format("PN: %d", processesToReturn.size() );
 		MMULogger.getInstance().write(commandToWrite, Level.INFO);
 		return processesToReturn;
 		

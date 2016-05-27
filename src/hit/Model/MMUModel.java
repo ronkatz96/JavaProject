@@ -6,10 +6,17 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.List;
 
-public class MMUModel implements Model {
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
+
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+
+public class MMUModel implements Model, Observable{
 	
 	private final String MODEL_RESOURCE_FILE;
 	private List<String> modelData;
+	
 	
 	public MMUModel (String nameOfFile)
 	{
@@ -21,7 +28,7 @@ public class MMUModel implements Model {
 	{
 		try {
 			setModelData(Files.readAllLines(new File(MODEL_RESOURCE_FILE).toPath(), Charset.defaultCharset() ));
-			System.out.println(modelData.toString());
+			//System.out.println(modelData.toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -36,4 +43,14 @@ public class MMUModel implements Model {
 		this.modelData = modelData;
 	}
 
+	@Override
+	public void addListener(InvalidationListener arg0) {
+		// TODO Auto-generated method stub	
+	}
+
+	@Override
+	public void removeListener(InvalidationListener arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 }
