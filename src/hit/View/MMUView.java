@@ -149,6 +149,8 @@ public class MMUView extends JPanel implements View, ActionListener {
 				switch (action) {
 				case "PF:": {
 					pageFaultCounter++;
+					pf.setText("Page Fault Amount: " + pageFaultCounter);
+					pf.invalidate();
 					pagesMap.put(Integer.valueOf(array[index][1]), -1);
 					isPageFault = true;
 					this.invalidate();
@@ -156,6 +158,8 @@ public class MMUView extends JPanel implements View, ActionListener {
 				}
 				case "PR:": {
 					pageReplacementCounter++;
+					pr.setText("Page Replacement Amount: " + pageReplacementCounter);
+					pr.invalidate();
 					pagesMap.put(Integer.valueOf(array[index][4]), Integer.valueOf(array[index][2]));
 					isPageFault = false;
 					this.invalidate();
@@ -177,21 +181,8 @@ public class MMUView extends JPanel implements View, ActionListener {
 			}
 		}
 
-		if (actionPerf.equals("play all")) {
-			while (index < modelData.size()) {
-				String action = array[index][0];
-				switch (action) {
-				case "PF": {
-					break;
-				}
-				case "PR": {
-					break;
-				}
-				case "GP":
-					break;
-				}
-				index++;
-			}
+		else if (actionPerf.equals("play all")) {
+			JOptionPane.showMessageDialog(frame, "We apologize, this button's functionality is not implemented yet!", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -210,8 +201,9 @@ public class MMUView extends JPanel implements View, ActionListener {
 			for (int i = 0; i < backHeader.length; i++) {
 				if (backHeader[i] == null) {
 					backHeader[i] = String.valueOf(newId);
+					int column = i;
 					for (int j = 0; j < backData.length; j++) {
-						backData[i][j] = data[j];
+						backData[j][column] = data[j];
 					}
 					break;
 				}
@@ -251,16 +243,19 @@ public class MMUView extends JPanel implements View, ActionListener {
 					}
 				}
 				for (int j = 0 ; j < data.length ; j++){
-					data[j][column] = backData[j][column];
+					data[j][column] = String.valueOf(backData[j][column]);
 				}
 				tableView.setModel(new DefaultTableModel(data,header));
 				tableView.setEnabled(false);
+				this.invalidate();
+				return;
 			}
-			else{
+			else {
 				for (int j = 0;j < header.length;j++ ){
+					if (header[j] != String.valueOf(newId)){
 					if(backHeader[j]!=null && Integer.parseInt((String) backHeader[j]) == newId){
-						header[j] = 0;
-						column = j;
+						header[j] = "*";
+						column = j;}
 						break;
 					}
 				}
@@ -269,6 +264,7 @@ public class MMUView extends JPanel implements View, ActionListener {
 				}
 				tableView.setModel(new DefaultTableModel(data,header));
 				tableView.setEnabled(false);
+				this.invalidate();
 			}
 		}
 	}
