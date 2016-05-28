@@ -5,14 +5,10 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.List;
-
-import javax.swing.event.TableModelListener;
-import javax.swing.table.TableModel;
-
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 
-public class MMUModel implements Model, Observable{
+public class MMUModel implements Model{
 	
 	private final String MODEL_RESOURCE_FILE;
 	private List<String> modelData;
@@ -41,16 +37,5 @@ public class MMUModel implements Model, Observable{
 
 	private void setModelData(List<String> modelData) {
 		this.modelData = modelData;
-	}
-
-	@Override
-	public void addListener(InvalidationListener arg0) {
-		// TODO Auto-generated method stub	
-	}
-
-	@Override
-	public void removeListener(InvalidationListener arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 }

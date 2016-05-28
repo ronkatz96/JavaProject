@@ -4,13 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-
 import hit.Model.Model;
-import hit.View.View;
+import hit.View.*;
 
-public class MMUController implements Controller, ActionListener
+public class MMUController implements Controller
 {
 	View viewer;
 	Model model;
@@ -18,6 +16,12 @@ public class MMUController implements Controller, ActionListener
 	public MMUController(View view, Model model)
 	{
 		this.viewer = view;
+		/*((MMUView)viewer).ChangedRamStatePLAY(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});*/
 		this.model = model;
 	}
 	@Override
@@ -27,10 +31,8 @@ public class MMUController implements Controller, ActionListener
 		List<List<String>> delimitedViewerData = createViewerData(data);
 		viewer.setModelData(delimitedViewerData);
 		viewer.open();
-		
 	}
-
-
+	
 	private List<List<String>> createViewerData(List<String> data) 
 	{
 		List<List<String>> rowsData = new ArrayList<List<String>>();
@@ -85,14 +87,6 @@ public class MMUController implements Controller, ActionListener
 		{
 			System.out.println(Arrays.toString(subString.toArray()));
 		}
-		
-		
 		return rowsData;
 	}
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
