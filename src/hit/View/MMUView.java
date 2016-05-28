@@ -8,6 +8,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -41,6 +44,7 @@ public class MMUView extends JPanel implements View, ActionListener {
 	private boolean isPageFault;
 	private JLabel pr;
 	private JLabel pf;
+	ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	public MMUView() {
 		
@@ -147,21 +151,24 @@ public class MMUView extends JPanel implements View, ActionListener {
 					pageFaultCounter++;
 					pagesMap.put(Integer.valueOf(array[index][1]), -1);
 					isPageFault = true;
+					this.invalidate();
 					break;
 				}
 				case "PR:": {
 					pageReplacementCounter++;
 					pagesMap.put(Integer.valueOf(array[index][4]), Integer.valueOf(array[index][2]));
 					isPageFault = false;
+					this.invalidate();
 					break;
 				}
 				case "GP:":
 					int newId = Integer.valueOf(array[index][2]);
 					int oldId = (pagesMap.get(newId) == null) ? -1 : pagesMap.get(newId);
 					Object[] arr = array[index][3].substring(1, array[index][3].length() - 1).split(",");
-
+					
 					updateBackTable(oldId, newId, arr, isPageFault);
 					updateTableView(newId);
+					this.invalidate();
 					break;
 				}
 				index++;
@@ -188,13 +195,13 @@ public class MMUView extends JPanel implements View, ActionListener {
 		}
 	}
 
-	public void updateBackTable(int oldId, int newId, Object[] data, boolean pf) {
+	public synchronized void updateBackTable(int oldId, int newId, Object[] data, boolean pf) {
 
 		if (oldId != -1) {
 			for (int i = 0; i < backHeader.length; i++) {
-				if ((int) backHeader[i] == oldId) {
+				if (backHeader[i]!=null && ((String)backHeader[i]).equals(String.valueOf(oldId))) {
 					backHeader[i] = String.valueOf(newId);
-					for (int j = 0; j < data.length; i++) {
+					for (int j = 0; j < data.length; j++) {
 						backData[i][j] = data[j];
 					}
 				}
@@ -203,8 +210,8 @@ public class MMUView extends JPanel implements View, ActionListener {
 			for (int i = 0; i < backHeader.length; i++) {
 				if (backHeader[i] == null) {
 					backHeader[i] = String.valueOf(newId);
-					for (int j = 0; j < data.length; i++) {
-						backData[i][j] = 123;
+					for (int j = 0; j < backData.length; j++) {
+						backData[i][j] = data[j];
 					}
 					break;
 				}
@@ -212,29 +219,32 @@ public class MMUView extends JPanel implements View, ActionListener {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
-	public void updateTableView(int newId) {
+	public void updateTableView(int newId) 
+	{
 
 		if (!pagesMap.isEmpty()) {
 			Integer id = pagesMap.remove(newId);
 			if (id != null) {
 				if (id == -1) {
-					pageFaultCounter++;
-					pf.setText("Page Replacement Amount: " + pageReplacementCounter);
+					//pageFaultCounter++;
+					pf.setText("Page Fault Amount: " + pageFaultCounter);
+					pf.invalidate();
 				} else {
-					pageReplacementCounter++;
-					pr.setText("Page Fault Amount: " + pageFaultCounter);
+					//pageReplacementCounter++;
+					pr.setText("Page Replacement Amount: " + pageReplacementCounter);
+					pr.invalidate();
 				}
 			}
 		}
-		
-		Object[] processes = prList.getSelectedValues();
-		
+
+		Object[] processes = prList.getSelectedValuesList().toArray();
+
 		int column = 0;
 		for (int i = 0;i<processes.length;i++){
-			if (processes[i] == array[index][1].replace("P", "Process ")){
-				for (int j = 0;j < header.length;i++ ){
-					if(backHeader[j]!=null && (int)backHeader[j] == newId){
+			String nameOfProcess = array[index][1].replace("P", "Process ");
+			if (((String)processes[i]).equals(nameOfProcess)){
+				for (int j = 0;j < header.length;j++ ){
+					if(backHeader[j]!=null && ((String)backHeader[j]).equals(String.valueOf(newId))){
 						header[j] = newId;
 						column = j;
 						break;
@@ -247,8 +257,8 @@ public class MMUView extends JPanel implements View, ActionListener {
 				tableView.setEnabled(false);
 			}
 			else{
-				for (int j = 0;j < header.length;i++ ){
-					if(backHeader[j]!=null && (int)backHeader[j] == newId){
+				for (int j = 0;j < header.length;j++ ){
+					if(backHeader[j]!=null && Integer.parseInt((String) backHeader[j]) == newId){
 						header[j] = 0;
 						column = j;
 						break;
