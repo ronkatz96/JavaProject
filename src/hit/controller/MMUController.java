@@ -1,7 +1,6 @@
 package hit.controller;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,6 +11,8 @@ public class MMUController implements Controller
 {
 	View viewer;
 	Model model;
+	List<List<String>> delimitedViewerData;
+	String[][] processedModelData;
 	
 	public MMUController(View view, Model model)
 	{
@@ -28,8 +29,9 @@ public class MMUController implements Controller
 	public void start() 
 	{
 		List<String> data = model.getModelData();
-		List<List<String>> delimitedViewerData = createViewerData(data);
-		viewer.setModelData(delimitedViewerData);
+		delimitedViewerData = createViewerData(data);
+		processModelData();
+		viewer.setModelData(processedModelData);
 		viewer.open();
 	}
 	
@@ -88,5 +90,13 @@ public class MMUController implements Controller
 			System.out.println(Arrays.toString(subString.toArray()));
 		}
 		return rowsData;
+	}
+	public void processModelData()
+	{
+		processedModelData = new String[delimitedViewerData.size()][];
+		for (int i = 0; i < delimitedViewerData.size(); i++) {
+			ArrayList<String> row = (ArrayList<String>) delimitedViewerData.get(i);
+			processedModelData[i] = row.toArray(new String[row.size()]);
+		}
 	}
 }

@@ -18,9 +18,10 @@ import javax.swing.table.TableModel;
 //this is a test. TODO implement actual VIEW.
 @SuppressWarnings("serial")
 public class MMUView extends JPanel implements View, ActionListener {
-	List<List<String>> modelData;
+	//List<List<String>> modelData;
+	
 	int numOfProcesses;
-	String[][] array;
+	String[][] modelData;
 	private JFrame frame;
 	private JButton play;
 	private JPanel pane;
@@ -54,10 +55,10 @@ public class MMUView extends JPanel implements View, ActionListener {
 		backData = new Object[5][5];
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+
 	@Override
 	public void open() {
-		String PN = modelData.get(1).get(1); // the number of processes is
+		String PN = modelData[1][1]; // the number of processes is
 												// located in the second array
 												// of the list in the second
 												// cell of that array (1,1)
@@ -66,31 +67,36 @@ public class MMUView extends JPanel implements View, ActionListener {
 												// the Table
 
 		// transform modelData into 2D array
-		array = new String[modelData.size()][];
-		for (int i = 0; i < modelData.size(); i++) {
-			ArrayList<String> row = (ArrayList<String>) modelData.get(i);
-			array[i] = row.toArray(new String[row.size()]);
-		}
+//		array = new String[modelData.size()][];
+//		for (int i = 0; i < modelData.size(); i++) {
+//			ArrayList<String> row = (ArrayList<String>) modelData.get(i);
+//			array[i] = row.toArray(new String[row.size()]);
+//		}
 		init();
 	}
 
 	@Override
-	public void setModelData(List<List<String>> data) {
+	public void setModelData(String[][] data) {
 		modelData = data;
+	}
+	
+	public void processData()
+	{
+		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		String actionPerf = arg0.getActionCommand();
 		if (actionPerf.equals("play")) {
-			if (index < modelData.size()) {
-				String action = array[index][0];
+			if (index < modelData.length) {
+				String action = modelData[index][0];
 				switch (action) {
 				case "PF:": {
 					pageFaultCounter++;
 					pf.setText("Page Fault Amount: " + pageFaultCounter);
 					pf.invalidate();
-					pagesMap.put(Integer.valueOf(array[index][1]), -1);
+					pagesMap.put(Integer.valueOf(modelData[index][1]), -1);
 					isPageFault = true;
 					this.invalidate();
 					break;
@@ -99,15 +105,15 @@ public class MMUView extends JPanel implements View, ActionListener {
 					pageReplacementCounter++;
 					pr.setText("Page Replacement Amount: " + pageReplacementCounter);
 					pr.invalidate();
-					pagesMap.put(Integer.valueOf(array[index][4]), Integer.valueOf(array[index][2]));
+					pagesMap.put(Integer.valueOf(modelData[index][4]), Integer.valueOf(modelData[index][2]));
 					isPageFault = false;
 					this.invalidate();
 					break;
 				}
 				case "GP:":
-					int newId = Integer.valueOf(array[index][2]);
+					int newId = Integer.valueOf(modelData[index][2]);
 					int oldId = (pagesMap.get(newId) == null) ? -1 : pagesMap.get(newId);
-					Object[] arr = array[index][3].substring(1, array[index][3].length() - 1).split(",");
+					Object[] arr = modelData[index][3].substring(1, modelData[index][3].length() - 1).split(",");
 
 					updateBackTable(oldId, newId, arr, isPageFault);
 					updateTableView(newId);
@@ -172,7 +178,7 @@ public class MMUView extends JPanel implements View, ActionListener {
 
 		int column = 0;
 		for (int i = 0; i < processes.length; i++) {
-			String nameOfProcess = array[index][1].replace("P", "Process ");
+			String nameOfProcess = modelData[index][1].replace("P", "Process ");
 			if (((String) processes[i]).equals(nameOfProcess)) {
 				for (int j = 0; j < header.length; j++) {
 					if (backHeader[j] != null && ((String) backHeader[j]).equals(String.valueOf(newId))) {

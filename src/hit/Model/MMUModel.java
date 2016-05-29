@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.List;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
+
 
 public class MMUModel implements Model{
 	

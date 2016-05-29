@@ -49,7 +49,6 @@ public class MMUDriver
 		List<ProcessCycles> processCycles = runConfig.getProcessesCycles();
 		List<hit.processes.Process> processes = createProcesses(processCycles,mmu);
 		runProcesses(processes);
-		//Currently this method, shutDown, doesn't do anything. this is a place holder.
 		mmu.shutDown();
 		
 		/*
@@ -71,21 +70,22 @@ public class MMUDriver
 			processesToReturn.add(new Process(appIds, mmu, element));
 			appIds++;
 		}
+		
 		String commandToWrite = String.format("PN: %d", processesToReturn.size() );
 		MMULogger.getInstance().write(commandToWrite, Level.INFO);
-		return processesToReturn;
-		
+		return processesToReturn;	
 	}
 	
-	private static void runProcesses(List<Process> applications) {
+	private static void runProcesses(List<Process> applications) 
+	{
 		executor = Executors.newCachedThreadPool();
 		for (Process element: applications)
 		{
 			executor.execute(element);
 		}
+		
 		executor.shutdown();
 		while(!executor.isTerminated());
-		System.out.println("All Threads have finished Executing!");
 	}
 	
 	private static RunConfiguration readConfigurationFile() throws UnsupportedEncodingException, IOException 
