@@ -18,8 +18,8 @@ import javax.swing.table.TableModel;
 //this is a test. TODO implement actual VIEW.
 @SuppressWarnings("serial")
 public class MMUView extends JPanel implements View, ActionListener {
-	//List<List<String>> modelData;
-	
+	// List<List<String>> modelData;
+
 	int numOfProcesses;
 	String[][] modelData;
 	private JFrame frame;
@@ -55,23 +55,22 @@ public class MMUView extends JPanel implements View, ActionListener {
 		backData = new Object[5][5];
 	}
 
-
 	@Override
 	public void open() {
 		String PN = modelData[1][1]; // the number of processes is
-												// located in the second array
-												// of the list in the second
-												// cell of that array (1,1)
+										// located in the second array
+										// of the list in the second
+										// cell of that array (1,1)
 		numOfProcesses = Integer.parseInt(PN); // gives us the number of
 												// Processes for the creation of
 												// the Table
 
 		// transform modelData into 2D array
-//		array = new String[modelData.size()][];
-//		for (int i = 0; i < modelData.size(); i++) {
-//			ArrayList<String> row = (ArrayList<String>) modelData.get(i);
-//			array[i] = row.toArray(new String[row.size()]);
-//		}
+		// array = new String[modelData.size()][];
+		// for (int i = 0; i < modelData.size(); i++) {
+		// ArrayList<String> row = (ArrayList<String>) modelData.get(i);
+		// array[i] = row.toArray(new String[row.size()]);
+		// }
 		init();
 	}
 
@@ -79,10 +78,9 @@ public class MMUView extends JPanel implements View, ActionListener {
 	public void setModelData(String[][] data) {
 		modelData = data;
 	}
-	
-	public void processData()
-	{
-		
+
+	public void processData() {
+
 	}
 
 	@Override
@@ -127,8 +125,50 @@ public class MMUView extends JPanel implements View, ActionListener {
 		}
 
 		else if (actionPerf.equals("play all")) {
-			JOptionPane.showMessageDialog(frame, "We apologize, this button's functionality is not implemented yet!",
-					"Error", JOptionPane.ERROR_MESSAGE);
+			/*
+			 * JOptionPane.showMessageDialog(frame,
+			 * "We apologize, this button's functionality is not implemented yet!"
+			 * , "Error", JOptionPane.ERROR_MESSAGE);
+			 */
+			while (index < modelData.length) {
+				String action = modelData[index][0];
+				switch (action) {
+				case "PF:": {
+					pageFaultCounter++;
+					pf.setText("Page Fault Amount: " + pageFaultCounter);
+					pf.invalidate();
+					pagesMap.put(Integer.valueOf(modelData[index][1]), -1);
+					isPageFault = true;
+					this.invalidate();
+					break;
+				}
+				case "PR:": {
+					pageReplacementCounter++;
+					pr.setText("Page Replacement Amount: " + pageReplacementCounter);
+					pr.invalidate();
+					pagesMap.put(Integer.valueOf(modelData[index][4]), Integer.valueOf(modelData[index][2]));
+					isPageFault = false;
+					this.invalidate();
+					break;
+				}
+				case "GP:":
+					int newId = Integer.valueOf(modelData[index][2]);
+					int oldId = (pagesMap.get(newId) == null) ? -1 : pagesMap.get(newId);
+					Object[] arr = modelData[index][3].substring(1, modelData[index][3].length() - 1).split(",");
+
+					updateBackTable(oldId, newId, arr, isPageFault);
+					updateTableView(newId);
+					this.invalidate();
+					break;
+				}
+				index++;
+				/*try {
+					Thread.sleep(100);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}*/
+			}
+			JOptionPane.showMessageDialog(frame, "End of log", "Notice", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 

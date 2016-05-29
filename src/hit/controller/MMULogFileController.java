@@ -12,7 +12,7 @@ public class MMULogFileController {
 	public void start(){
 		Socket client = null;
 		try{
-			ServerSocket server = new ServerSocket(1234);
+			ServerSocket server = new ServerSocket(12345);
 			client = server.accept();
 			ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream());
 			ObjectInputStream input = new ObjectInputStream(client.getInputStream());
@@ -35,7 +35,6 @@ public class MMULogFileController {
 			try {
 				client.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

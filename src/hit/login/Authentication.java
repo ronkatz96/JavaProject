@@ -1,50 +1,40 @@
 package hit.login;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedHashMap;
-import java.util.Map.Entry;
-import hit.util.AuthenticationInputStream;
-
 
 public class Authentication {
 
 	static final String DEFAULT_FILE_NAME = "resources\\users\\users.txt";
-	static final int _SIZE = 500;
 	private static LinkedHashMap<String, String> users;
-	
-	
+
 	public Authentication() {
-		
-	}
-	
-	public static boolean authenticate(String user, String password) {
 		
 		try 
 		{
-			ReadUsers();
+			BufferedReader userLog = new BufferedReader(new FileReader(DEFAULT_FILE_NAME));
+			while(userLog.readLine() != null){
+				String line = userLog.readLine();
+				String [] lineArr = line.split(" ");
+				users.put(lineArr[0], lineArr[1]);
+			}
+			userLog.close();
 		} 
-		catch (IOException | ClassNotFoundException e) 
+		catch (IOException e) 
 		{
-			System.out.println("there are no users");
+			System.out.println("There are no users");
 		}
-		for (Entry<String, String> entry: users.entrySet()){
-			if ((entry.getKey() == user) && (entry.getValue() == password))
-				return true;
-		}
-		return false;
 	}
-	
-	private synchronized static void ReadUsers() throws ClassNotFoundException, FileNotFoundException, IOException
-	{		
-		AuthenticationInputStream input;
-		input = new AuthenticationInputStream(new FileInputStream(DEFAULT_FILE_NAME));
-		if (input != null)
-		{
-			users = input.readAllUsers();
-			input.close();
-		}
+
+	public static boolean authenticate(String user, String password) {
+		
+			if(users.get(user).equals(password)){
+				return true;
+			}
+			else{
+				return false;
+			}
 	}
 }
-
