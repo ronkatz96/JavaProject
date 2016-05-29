@@ -64,12 +64,7 @@ public class MMUView extends JPanel implements View, ActionListener {
 		numOfProcesses = Integer.parseInt(PN); // gives us the number of
 												// Processes for the creation of
 												// the Table
-		System.out.println("this is the number of Processes: " + numOfProcesses);
-		Object[] columns = new Object[numOfProcesses];
 
-		for (int i = 0; i < numOfProcesses; i++) {
-			columns[i] = String.format("Process %d", i + 1);
-		} // this is the for he columns.
 
 		// transform modelData into 2D array
 		array = new String[modelData.size()][];
@@ -77,62 +72,8 @@ public class MMUView extends JPanel implements View, ActionListener {
 			ArrayList<String> row = (ArrayList<String>) modelData.get(i);
 			array[i] = row.toArray(new String[row.size()]);
 		}
-
-		for (int i = 0; i < array.length; i++) {
-			if (array[i][0].contains("GP")) {
-				System.out.println(array[i][3]);
-			}
+		init();	
 		}
-
-		frame = new JFrame("MMU Simulator");
-		frame.getContentPane().setPreferredSize(new Dimension(1000, 350));
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// mmuPanel = new MMUPanel();
-		pane = new JPanel();
-		pane.setLayout(new BorderLayout());
-		frame.getContentPane().add(pane);
-
-		southPane = new JPanel(new GridLayout(1, 2));
-		play = new JButton("Play");
-		southPane.add(play);
-		play.addActionListener(this);
-		play.setActionCommand("play");
-		playAll = new JButton("Play All");
-		southPane.add(playAll);
-		playAll.addActionListener(this);
-		playAll.setActionCommand("play all");
-		labelPane = new JPanel(new GridLayout(2, 1));
-		pr = new JLabel("Page Replacement Amount: " + pageReplacementCounter);
-		labelPane.add(pr);
-		pf = new JLabel("Page Fault Amount: " + pageFaultCounter);
-		labelPane.add(pf);
-
-		eastPane = new JPanel(new GridLayout(2, 1));
-		eastPane.add(labelPane);
-
-		listPane = new JPanel(new BorderLayout());
-		JLabel processes = new JLabel("Processes");
-		listPane.add(processes, BorderLayout.NORTH);
-		prList = new JList(columns);
-		listPane.add(prList, BorderLayout.CENTER);
-		eastPane.add(listPane);
-
-		TableModel table = new DefaultTableModel(new String[5][5], new String[] { " ", " ", " ", " ", " " });
-		tableView = new JTable(table);
-
-		scrollPane = new JScrollPane(tableView);
-		tableView.setPreferredScrollableViewportSize(tableView.getPreferredSize());
-		pane.add(scrollPane);
-		pane.add(eastPane, BorderLayout.EAST);
-		pane.add(southPane, BorderLayout.SOUTH);
-		frame.pack();
-		frame.setVisible(true);
-	}
-
-	/*
-	 * public void ChangedRamStatePLAY(ActionListener ListenForPlayButton) {
-	 * play.addActionListener(ListenForPlayButton); }
-	 */
 
 	@Override
 	public void setModelData(List<List<String>> data) {
@@ -140,8 +81,8 @@ public class MMUView extends JPanel implements View, ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-
+	public void actionPerformed(ActionEvent arg0) 
+	{
 		String actionPerf = arg0.getActionCommand();
 		if (actionPerf.equals("play")) {
 			if (index < modelData.size()) {
@@ -267,5 +208,57 @@ public class MMUView extends JPanel implements View, ActionListener {
 				this.invalidate();
 			}
 		}
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	void init()
+	{
+		Object[] columns = new Object[numOfProcesses];
+		for (int i = 0; i < numOfProcesses; i++) {
+			columns[i] = String.format("Process %d", i + 1);
+		}
+		frame = new JFrame("MMU Simulator");
+		frame.getContentPane().setPreferredSize(new Dimension(1000, 350));
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// mmuPanel = new MMUPanel();
+		pane = new JPanel();
+		pane.setLayout(new BorderLayout());
+		frame.getContentPane().add(pane);
+
+		southPane = new JPanel(new GridLayout(1, 2));
+		play = new JButton("Play");
+		southPane.add(play);
+		play.addActionListener(this);
+		play.setActionCommand("play");
+		playAll = new JButton("Play All");
+		southPane.add(playAll);
+		playAll.addActionListener(this);
+		playAll.setActionCommand("play all");
+		labelPane = new JPanel(new GridLayout(2, 1));
+		pr = new JLabel("Page Replacement Amount: " + pageReplacementCounter);
+		labelPane.add(pr);
+		pf = new JLabel("Page Fault Amount: " + pageFaultCounter);
+		labelPane.add(pf);
+
+		eastPane = new JPanel(new GridLayout(2, 1));
+		eastPane.add(labelPane);
+
+		listPane = new JPanel(new BorderLayout());
+		JLabel processes = new JLabel("Processes");
+		listPane.add(processes, BorderLayout.NORTH);
+		prList = new JList(columns);
+		listPane.add(prList, BorderLayout.CENTER);
+		eastPane.add(listPane);
+
+		TableModel table = new DefaultTableModel(new String[5][5], new String[] { " ", " ", " ", " ", " " });
+		tableView = new JTable(table);
+
+		scrollPane = new JScrollPane(tableView);
+		tableView.setPreferredScrollableViewportSize(tableView.getPreferredSize());
+		pane.add(scrollPane);
+		pane.add(eastPane, BorderLayout.EAST);
+		pane.add(southPane, BorderLayout.SOUTH);
+		frame.pack();
+		frame.setVisible(true);
 	}
 }
