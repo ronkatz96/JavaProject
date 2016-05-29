@@ -47,7 +47,7 @@ public class MMUView extends JPanel implements View, ActionListener {
 	ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	public MMUView() {
-		
+
 		header = new Object[5];
 		data = new Object[5][5];
 		backHeader = new Object[5];
@@ -65,15 +65,14 @@ public class MMUView extends JPanel implements View, ActionListener {
 												// Processes for the creation of
 												// the Table
 
-
 		// transform modelData into 2D array
 		array = new String[modelData.size()][];
 		for (int i = 0; i < modelData.size(); i++) {
 			ArrayList<String> row = (ArrayList<String>) modelData.get(i);
 			array[i] = row.toArray(new String[row.size()]);
 		}
-		init();	
-		}
+		init();
+	}
 
 	@Override
 	public void setModelData(List<List<String>> data) {
@@ -81,8 +80,7 @@ public class MMUView extends JPanel implements View, ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) 
-	{
+	public void actionPerformed(ActionEvent arg0) {
 		String actionPerf = arg0.getActionCommand();
 		if (actionPerf.equals("play")) {
 			if (index < modelData.size()) {
@@ -110,7 +108,7 @@ public class MMUView extends JPanel implements View, ActionListener {
 					int newId = Integer.valueOf(array[index][2]);
 					int oldId = (pagesMap.get(newId) == null) ? -1 : pagesMap.get(newId);
 					Object[] arr = array[index][3].substring(1, array[index][3].length() - 1).split(",");
-					
+
 					updateBackTable(oldId, newId, arr, isPageFault);
 					updateTableView(newId);
 					this.invalidate();
@@ -118,12 +116,13 @@ public class MMUView extends JPanel implements View, ActionListener {
 				}
 				index++;
 			} else {
-				JOptionPane.showMessageDialog(frame, "End of memory", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(frame, "End of log", "Notice", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 
 		else if (actionPerf.equals("play all")) {
-			JOptionPane.showMessageDialog(frame, "We apologize, this button's functionality is not implemented yet!", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(frame, "We apologize, this button's functionality is not implemented yet!",
+					"Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -131,7 +130,7 @@ public class MMUView extends JPanel implements View, ActionListener {
 
 		if (oldId != -1) {
 			for (int i = 0; i < backHeader.length; i++) {
-				if (backHeader[i]!=null && ((String)backHeader[i]).equals(String.valueOf(oldId))) {
+				if (backHeader[i] != null && ((String) backHeader[i]).equals(String.valueOf(oldId))) {
 					backHeader[i] = String.valueOf(newId);
 					for (int j = 0; j < data.length; j++) {
 						backData[i][j] = data[j];
@@ -152,18 +151,17 @@ public class MMUView extends JPanel implements View, ActionListener {
 		}
 	}
 
-	public void updateTableView(int newId) 
-	{
+	public void updateTableView(int newId) {
 
 		if (!pagesMap.isEmpty()) {
 			Integer id = pagesMap.remove(newId);
 			if (id != null) {
 				if (id == -1) {
-					//pageFaultCounter++;
+					// pageFaultCounter++;
 					pf.setText("Page Fault Amount: " + pageFaultCounter);
 					pf.invalidate();
 				} else {
-					//pageReplacementCounter++;
+					// pageReplacementCounter++;
 					pr.setText("Page Replacement Amount: " + pageReplacementCounter);
 					pr.invalidate();
 				}
@@ -173,46 +171,45 @@ public class MMUView extends JPanel implements View, ActionListener {
 		Object[] processes = prList.getSelectedValuesList().toArray();
 
 		int column = 0;
-		for (int i = 0;i<processes.length;i++){
+		for (int i = 0; i < processes.length; i++) {
 			String nameOfProcess = array[index][1].replace("P", "Process ");
-			if (((String)processes[i]).equals(nameOfProcess)){
-				for (int j = 0;j < header.length;j++ ){
-					if(backHeader[j]!=null && ((String)backHeader[j]).equals(String.valueOf(newId))){
+			if (((String) processes[i]).equals(nameOfProcess)) {
+				for (int j = 0; j < header.length; j++) {
+					if (backHeader[j] != null && ((String) backHeader[j]).equals(String.valueOf(newId))) {
 						header[j] = newId;
 						column = j;
 						break;
 					}
 				}
-				for (int j = 0 ; j < data.length ; j++){
+				for (int j = 0; j < data.length; j++) {
 					data[j][column] = String.valueOf(backData[j][column]);
 				}
-				tableView.setModel(new DefaultTableModel(data,header));
+				tableView.setModel(new DefaultTableModel(data, header));
 				tableView.setEnabled(false);
 				this.invalidate();
 				return;
-			}
-			else {
-				for (int j = 0;j < header.length;j++ ){
-					if (header[j] != String.valueOf(newId)){
-					if(backHeader[j]!=null && Integer.parseInt((String) backHeader[j]) == newId){
-						header[j] = "*";
-						column = j;}
+			} else {
+				for (int j = 0; j < header.length; j++) {
+					if (header[j] != String.valueOf(newId)) {
+						if (backHeader[j] != null && Integer.parseInt((String) backHeader[j]) == newId) {
+							header[j] = "*";
+							column = j;
+						}
 						break;
 					}
 				}
-				for (int j = 0 ; j < data.length ; j++){
+				for (int j = 0; j < data.length; j++) {
 					data[j][column] = "*";
 				}
-				tableView.setModel(new DefaultTableModel(data,header));
+				tableView.setModel(new DefaultTableModel(data, header));
 				tableView.setEnabled(false);
 				this.invalidate();
 			}
 		}
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	void init()
-	{
+	void init() {
 		Object[] columns = new Object[numOfProcesses];
 		for (int i = 0; i < numOfProcesses; i++) {
 			columns[i] = String.format("Process %d", i + 1);
