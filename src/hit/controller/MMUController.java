@@ -11,18 +11,13 @@ public class MMUController implements Controller
 {
 	View viewer;
 	Model model;
+	MMUFlowSelection flowSelection;
 	List<List<String>> delimitedViewerData;
 	String[][] processedModelData;
 	
 	public MMUController(View view, Model model)
 	{
 		this.viewer = view;
-		/*((MMUView)viewer).ChangedRamStatePLAY(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});*/
 		this.model = model;
 	}
 	@Override
@@ -33,6 +28,7 @@ public class MMUController implements Controller
 		processModelData();
 		viewer.setModelData(processedModelData);
 		viewer.open();
+		flowSelection.init();
 	}
 	
 	private List<List<String>> createViewerData(List<String> data) 
