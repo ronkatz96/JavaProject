@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -82,7 +83,8 @@ public class MMUView extends JPanel implements View, ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent arg0) 
+	{
 		String actionPerf = arg0.getActionCommand();
 		if (actionPerf.equals("play")) {
 			if (index < modelData.length) {
@@ -94,7 +96,7 @@ public class MMUView extends JPanel implements View, ActionListener {
 					pf.invalidate();
 					pagesMap.put(Integer.valueOf(modelData[index][1]), -1);
 					isPageFault = true;
-					this.invalidate();
+					frame.repaint();
 					break;
 				}
 				case "PR:": {
@@ -103,7 +105,7 @@ public class MMUView extends JPanel implements View, ActionListener {
 					pr.invalidate();
 					pagesMap.put(Integer.valueOf(modelData[index][4]), Integer.valueOf(modelData[index][2]));
 					isPageFault = false;
-					this.invalidate();
+					frame.repaint();
 					break;
 				}
 				case "GP:":
@@ -113,7 +115,7 @@ public class MMUView extends JPanel implements View, ActionListener {
 
 					updateBackTable(oldId, newId, arr, isPageFault);
 					updateTableView(newId);
-					this.invalidate();
+					frame.repaint();
 					break;
 				}
 				index++;
@@ -160,15 +162,26 @@ public class MMUView extends JPanel implements View, ActionListener {
 					break;
 				}
 				index++;
-				/*try {
-					Thread.sleep(100);
+			while (index < modelData.length) 
+			{
+				for(ActionListener a: play.getActionListeners()) {
+				    a.actionPerformed(new ActionEvent(play, index,"play"));
+				}
+				index++;
+			
+				try {
+					Thread.sleep(500);
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
-				}*/
+				}
+
 			}
-			JOptionPane.showMessageDialog(frame, "End of log", "Notice", JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
-	}
+			
+			//JOptionPane.showMessageDialog(frame, "End of log", "Notice", JOptionPane.INFORMATION_MESSAGE);
+		}
+	
 
 	public synchronized void updateBackTable(int oldId, int newId, Object[] data, boolean pf) {
 
@@ -176,7 +189,7 @@ public class MMUView extends JPanel implements View, ActionListener {
 			for (int i = 0; i < backHeader.length; i++) {
 				if (backHeader[i] != null && ((String) backHeader[i]).equals(String.valueOf(oldId))) {
 					backHeader[i] = String.valueOf(newId);
-					for (int j = 0; j < data.length; j++) {
+					for (int j = 0; j < backData.length; j++) {
 						backData[i][j] = data[j];
 					}
 				}
@@ -212,12 +225,12 @@ public class MMUView extends JPanel implements View, ActionListener {
 			}
 		}
 
-		Object[] processes = prList.getSelectedValuesList().toArray();
+		List<Object> processes = prList.getSelectedValuesList();
 
 		int column = 0;
-		for (int i = 0; i < processes.length; i++) {
+		for (int i = 0; i < processes.size(); i++) {
 			String nameOfProcess = modelData[index][1].replace("P", "Process ");
-			if (((String) processes[i]).equals(nameOfProcess)) {
+			if (processes.contains((Object) nameOfProcess)) {
 				for (int j = 0; j < header.length; j++) {
 					if (backHeader[j] != null && ((String) backHeader[j]).equals(String.valueOf(newId))) {
 						header[j] = newId;
@@ -274,6 +287,7 @@ public class MMUView extends JPanel implements View, ActionListener {
 		playAll = new JButton("Play All");
 		southPane.add(playAll);
 		playAll.addActionListener(this);
+
 		playAll.setActionCommand("play all");
 		labelPane = new JPanel(new GridLayout(2, 1));
 		pr = new JLabel("Page Replacement Amount: " + pageReplacementCounter);
@@ -302,4 +316,8 @@ public class MMUView extends JPanel implements View, ActionListener {
 		frame.pack();
 		frame.setVisible(true);
 	}
+
+
+
 }
+

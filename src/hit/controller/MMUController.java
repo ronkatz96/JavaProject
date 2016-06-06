@@ -19,6 +19,7 @@ public class MMUController implements Controller
 	{
 		this.viewer = view;
 		this.model = model;
+		this.flowSelection = new MMUFlowSelection();
 	}
 	@Override
 	public void start() 
